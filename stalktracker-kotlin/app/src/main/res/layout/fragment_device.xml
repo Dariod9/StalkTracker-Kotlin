@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Button
+        android:id="@+id/dev"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:drawableLeft="@android:drawable/stat_sys_data_bluetooth"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp"
+        app:drawableTint="@color/colorAccent"
+        tools:context="com.example.android.stalktracker.DeviceFragment"
+        tools:ignore="SpeakableTextPresentCheck" />
+</layout>

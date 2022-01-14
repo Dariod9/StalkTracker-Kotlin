@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_logged"
+    app:startDestination="@id/afterLoginFragment">
+    <fragment
+        android:id="@+id/afterLoginFragment"
+        android:name="com.example.android.stalktracker.AfterLoginFragment"
+        android:label="AfterLoginFragment"
+        tools:layout="@layout/fragment_afterlogin">
+        <action
+            android:id="@+id/action_afterLoginFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/friendsListFragment"
+        android:name="com.example.android.stalktracker.FriendsListFragment"
+        android:label="Friends List"
+        tools:layout="@layout/fragment_friendslist" >
+        <action
+            android:id="@+id/action_friendsListFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/blackListFragment"
+        android:name="com.example.android.stalktracker.BlackListFragment"
+        android:label="Black List"
+        tools:layout="@layout/fragment_blacklist" >
+        <action
+            android:id="@+id/action_blackListFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.example.android.stalktracker.HIstoryFragment"
+        android:label="History"
+        tools:layout="@layout/fragment_history" >
+        <action
+            android:id="@+id/action_historyFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutFragment2"
+        android:name="com.example.android.stalktracker.AboutFragment"
+        android:label="About Us"
+        tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/contactFragment2"
+        android:name="com.example.android.stalktracker.ContactFragment"
+        android:label="Contact Us"
+        tools:layout="@layout/fragment_contact" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.android.stalktracker.ProfileFragment"
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile"/>
+    <fragment
+        android:id="@+id/deviceFragment"
+        android:name="com.example.android.stalktracker.DeviceFragment"
+        android:label="fragment_device"
+        tools:layout="@layout/fragment_device" />
+</navigation>

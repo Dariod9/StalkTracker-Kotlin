@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/TitleFragment"
+        android:icon="@android:drawable/ic_menu_help"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/friendsListFragment"
+        android:icon="@android:drawable/star_big_off"
+        android:title="@string/friendslist" />
+    <item
+        android:id="@+id/blackListFragment"
+        android:icon="@android:drawable/alert_light_frame"
+        android:title="@string/blacklist" />
+    <item
+        android:id="@+id/historyFragment"
+        android:icon="@android:drawable/ic_menu_my_calendar"
+        android:title="@string/history" />
+    <item
+        android:id="@+id/aboutFragment2"
+        android:icon="@android:drawable/ic_dialog_info"
+        android:title="@string/about" />
+    <item
+        android:id="@+id/contactFragment2"
+        android:icon="@android:drawable/stat_sys_phone_call"
+        android:title="@string/contactUs" />
+
+</menu>
