@@ -16,31 +16,35 @@
 
 package com.example.android.stalktracker
 
-import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.Navigation
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.example.android.stalktracker.databinding.ActivityLoggedBinding
-import com.example.android.stalktracker.databinding.ActivityMainBinding
-import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.google.firebase.firestore.ktx.firestoreSettings
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import models.Device
+import java.time.LocalDateTime
+
 
 class LoggedActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
-    private var friend_devices: ArrayList<Device> = ArrayList()
-    private var black_devices: ArrayList<Device> = ArrayList()
     lateinit var auth : FirebaseAuth
     lateinit var navigationView: NavigationView
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         @Suppress("UNUSED_VARIABLE")
@@ -50,8 +54,17 @@ class LoggedActivity : AppCompatActivity() {
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
         NavigationUI.setupWithNavController(binding.navView, navController)
         navigationView=findViewById(R.id.navView)
-        black_devices.add(Device("Stalker1", "Endereço"))
-        friend_devices.add(Device("Friend1", "Endereço"))
+
+        var settings = firestoreSettings {
+            isPersistenceEnabled = true
+        }
+
+        settings = FirebaseFirestoreSettings.Builder()
+            .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
+            .build()
+
+        FirebaseUtils().fireStoreDatabase.firestoreSettings = settings
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -59,31 +72,24 @@ class LoggedActivity : AppCompatActivity() {
         return NavigationUI.navigateUp(navController, drawerLayout)
     }
 
-    fun getFriends(): ArrayList<Device> {
-        return friend_devices
-    }
-
-    fun addFriend(friend: Device?){
-        if (friend != null) {
-            friend_devices.add(friend)
-        }
-    }
-
-    fun getBlack(): ArrayList<Device> {
-        return friend_devices
-    }
-
-    fun addBlack(friend: Device?){
-        if (friend != null) {
-            black_devices.add(friend)
-        }
-    }
+//
+//    fun getNum(){
+////        Log.println(Log.DEBUG, String(),deviceViewModel.numDevices.toString())
+//        val ref=this
+//        lifecycleScope.launch(Dispatchers.IO) {
+//            ref.runOnUiThread {
+//                Log.println(Log.DEBUG, String(), deviceViewModel.numDevices.toString())
+//            }
+//        }
+//    }
 
 
     fun changeNav(){
         navigationView.menu.clear()
         navigationView.inflateMenu(R.menu.navdrawer_menu_logged)
     }
+
+
 
 //    fun checkLogged() {
 //        auth = Firebase.auth

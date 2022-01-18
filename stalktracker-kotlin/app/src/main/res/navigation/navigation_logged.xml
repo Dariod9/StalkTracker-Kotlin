@@ -60,4 +60,9 @@
         android:name="com.example.android.stalktracker.DeviceFragment"
         android:label="fragment_device"
         tools:layout="@layout/fragment_device" />
+    <activity
+        android:id="@+id/mapsActivity"
+        android:name="com.example.android.stalktracker.MapsActivity"
+        android:label="activity_maps"
+        tools:layout="@layout/activity_maps" />
 </navigation>

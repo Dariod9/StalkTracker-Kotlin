@@ -9,5 +9,5 @@ import androidx.recyclerview.widget.RecyclerView
 
 class Util {
     class TextItemViewHolder(val textView: TextView): RecyclerView.ViewHolder(textView)
-    class ButtonItemViewHolder(val button: Button): RecyclerView.ViewHolder(button)
+
 }

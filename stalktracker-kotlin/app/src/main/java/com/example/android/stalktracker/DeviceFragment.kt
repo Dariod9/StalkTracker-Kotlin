@@ -16,21 +16,25 @@
 
 package com.example.android.stalktracker
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import com.example.android.stalktracker.databinding.FragmentDeviceBinding
-import com.example.android.stalktracker.databinding.FragmentFriendslistBinding
-import java.util.*
+import models.Device
+import models.DeviceAdapter
+import java.time.LocalDateTime
 
 class DeviceFragment : Fragment() {
     private val act= activity as LoggedActivity
     private val adapter = DeviceAdapter()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -42,13 +46,13 @@ class DeviceFragment : Fragment() {
 
             Log.println(Log.DEBUG, String(), "Button successful")
             val deviceString=binding.dev.text.trim().toString()
-            var device=Device("a","b")
+            var device: Device
             if(deviceString.contains("\n")){
                 val ar=deviceString.split("\n")
-                device=Device(ar[1],ar[2].removePrefix("(").removePrefix(")"))
+                device= Device(ar[1],ar[2].removePrefix("(").removePrefix(")"), false, false)
             }
             else{
-                device=Device("None",deviceString)
+                device= Device("None",deviceString, false, false)
             }
             adapter.friendAlert(context, act, device)
         }

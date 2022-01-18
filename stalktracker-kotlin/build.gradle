@@ -28,9 +28,12 @@ buildscript {
         google()
         jcenter()
     }
+    buildscript {
+        ext.room_version = '2.1.0-alpha01'
+    }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradleVersion"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21"
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10'
         classpath 'com.google.gms:google-services:4.3.10'
 
 

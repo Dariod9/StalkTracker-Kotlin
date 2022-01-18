@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+def room_version = "2.2.4"
+
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
@@ -46,8 +48,15 @@ android {
     }
     productFlavors {
     }
+    packagingOptions {
+        exclude 'META-INF/atomicfu.kotlin_module'
+    }
     buildFeatures {
         dataBinding true
+        viewBinding true
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
@@ -59,11 +68,21 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$supportlibVersion"
     implementation 'io.github.inflationx:calligraphy3:3.1.1'
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
     implementation 'io.github.inflationx:viewpump:2.0.3'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.legacy:legacy-support-v4:1.0.0"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
+//    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+//    implementation 'com.google.android.gms:play-services-location:15.0.0'
+    kapt "androidx.room:room-compiler:$room_version"
     implementation "com.google.android.material:material:1.2.1"
     implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
