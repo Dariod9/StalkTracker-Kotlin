@@ -30,6 +30,9 @@
         <entry key="..\:/Users/DarioMatos/Desktop/CM/CM21_89288/stalktracker-kotlin/app/src/main/res/menu/navdrawer_menu_logged.xml" value="0.144" />
         <entry key="..\:/Users/DarioMatos/Desktop/CM/CM21_89288/stalktracker-kotlin/app/src/main/res/menu/options_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/DarioMatos/Desktop/CM/CM21_89288/stalktracker-kotlin/app/src/main/res/menu/winner_menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/DarioMatos/Desktop/StalkTracker-Kotlin/stalktracker-kotlin/app/src/main/res/layout/fragment_blacklist.xml" value="0.17864583333333334" />
+        <entry key="..\:/Users/DarioMatos/Desktop/StalkTracker-Kotlin/stalktracker-kotlin/app/src/main/res/layout/fragment_history.xml" value="0.19444444444444445" />
+        <entry key="..\:/Users/DarioMatos/Desktop/StalkTracker-Kotlin/stalktracker-kotlin/app/src/main/res/layout/fragment_profile.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>

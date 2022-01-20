@@ -56,17 +56,9 @@ class AfterLoginFragment : Fragment(), LocationListener {
     private var location : LatLng= LatLng(0.0,0.0)
 
     private lateinit var locationManager: LocationManager
-    var fusedLocationProviderClient: FusedLocationProviderClient? = null
-    val REQUEST_CODE = 101
-    //    private var m_bluetoothAdapter: BluetoothAdapter? = null
-    private lateinit var m_pairedDevices: Set<BluetoothDevice>
     private var m_devices: ArrayList<Device> = ArrayList()
     private var friendsAdresses: ArrayList<String> = ArrayList()
 
-
-    companion object {
-        val EXTRA_ADDRESS: String = "Device_address"
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
