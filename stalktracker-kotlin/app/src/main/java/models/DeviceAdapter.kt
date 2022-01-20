@@ -71,11 +71,12 @@ class DeviceAdapter: RecyclerView.Adapter<ButtonItemViewHolder>() {
                     })
                 .setNeutralButton(Html.fromHtml("<font color='#323230'>Cancel</font>"),
                     DialogInterface.OnClickListener { dialog, id ->
-                        addBlack(device)
                         // FIRE ZE MISSILES!
                     })
                 .setNegativeButton(Html.fromHtml("<font color='#F44336'>Stalker</font>"),
                     DialogInterface.OnClickListener { dialog, id ->
+                        addBlack(device)
+
                         // User cancelled the dialog
                     })
             show()
@@ -136,7 +137,7 @@ class DeviceAdapter: RecyclerView.Adapter<ButtonItemViewHolder>() {
             FirebaseUtils().fireStoreDatabase.collection("Users").document(it)
                 .collection("users")
                 .document(device.address)
-                .update("friend", true)
+                .update("friend", true, "location", device.position)
                 .addOnSuccessListener {
                     Log.println(Log.DEBUG, String(), "Success")
                 }
@@ -152,7 +153,7 @@ class DeviceAdapter: RecyclerView.Adapter<ButtonItemViewHolder>() {
             FirebaseUtils().fireStoreDatabase.collection("Users").document(it)
                 .collection("users")
                 .document(device.address)
-                .update("black", true)
+                .update("black", true, "location", device.position)
                 .addOnSuccessListener {
                     Log.println(Log.DEBUG, String(), "Success")
                 }

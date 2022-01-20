@@ -22,6 +22,9 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.*
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -38,15 +41,23 @@ import android.os.Parcelable
 import android.provider.Settings
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.maps.model.LatLng
 
 import models.Device
 import models.DeviceAdapter
 import java.time.LocalDateTime
 
-class AfterLoginFragment : Fragment() {
+class AfterLoginFragment : Fragment(), LocationListener {
     private lateinit var auth: FirebaseAuth
     private val adapter = DeviceAdapter()
+    private var location : LatLng= LatLng(0.0,0.0)
 
+    private lateinit var locationManager: LocationManager
+    var fusedLocationProviderClient: FusedLocationProviderClient? = null
+    val REQUEST_CODE = 101
     //    private var m_bluetoothAdapter: BluetoothAdapter? = null
     private lateinit var m_pairedDevices: Set<BluetoothDevice>
     private var m_devices: ArrayList<Device> = ArrayList()
@@ -95,6 +106,9 @@ class AfterLoginFragment : Fragment() {
                 2
             )
         }
+
+
+        getLocation()
 
 
         //BT
@@ -168,6 +182,34 @@ class AfterLoginFragment : Fragment() {
     }
 
 
+    private fun getLocation() {
+        locationManager = (activity as LoggedActivity)!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if ((ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+            ActivityCompat.requestPermissions(activity as LoggedActivity, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 2)
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
+    }
+
+    override fun onLocationChanged(location: Location) {
+//        currentLocation=location
+        this.location=LatLng(location.latitude, location.longitude)
+        Log.println(Log.DEBUG, String(), "LOCATION : ${location.latitude} , ${location.longitude}")
+
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == 2) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.println(Log.DEBUG, String(), "GRANTED")
+
+            }
+            else {
+                Log.println(Log.DEBUG, String(), "DENIED")
+
+            }
+        }
+    }
+
     private val mReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         @RequiresApi(Build.VERSION_CODES.O)
         @SuppressLint("MissingPermission")
@@ -184,8 +226,10 @@ class AfterLoginFragment : Fragment() {
                 val device =
                     intent.getParcelableExtra<Parcelable>(BluetoothDevice.EXTRA_DEVICE) as BluetoothDevice?
                 if (device != null) {
-                    val newdev =
-                        Device(device.name, device.address, false, false)
+                    val newdev :Device
+                    if(device.name!=null)
+                        newdev = Device(device.name, device.address, false, false, location)
+                    else newdev = Device(device.address,device.address, false,false,location)
                     if (!friendsAdresses.contains(newdev.address)) {
                         m_devices.add(newdev)
                         auth.currentUser?.email?.let {
@@ -200,8 +244,6 @@ class AfterLoginFragment : Fragment() {
                                     Log.println(Log.DEBUG, String(), "Error adding document")
                                 }
                         }
-//                    (activity as LoggedActivity).deviceViewModel.insert(Device(device.name, device.address))
-//                    (activity as LoggedActivity).getNum()
 
                     }
                 }

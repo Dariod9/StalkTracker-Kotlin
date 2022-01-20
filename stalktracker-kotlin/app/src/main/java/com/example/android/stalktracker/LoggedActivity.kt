@@ -16,26 +16,24 @@
 
 package com.example.android.stalktracker
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.viewModels
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.android.stalktracker.databinding.ActivityLoggedBinding
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestoreSettings
-import com.google.firebase.firestore.ktx.firestoreSettings
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import models.Device
-import java.time.LocalDateTime
 
 
 class LoggedActivity : AppCompatActivity() {
@@ -55,15 +53,29 @@ class LoggedActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(binding.navView, navController)
         navigationView=findViewById(R.id.navView)
 
-        var settings = firestoreSettings {
-            isPersistenceEnabled = true
+//        var settings = firestoreSettings {
+//            isPersistenceEnabled = true
+//        }
+//
+//        settings = FirebaseFirestoreSettings.Builder()
+//            .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
+//            .build()
+//
+//        FirebaseUtils().fireStoreDatabase.firestoreSettings = settings
+
+        val locationPermissionCheck =
+            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        
+        if (locationPermissionCheck != PackageManager.PERMISSION_GRANTED) {
+            Log.println(Log.DEBUG, String(), "Location denied")
+//            Toast.makeText(mContext, "Location permission denied", Toast.LENGTH_SHORT).show()
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),0
+            )
+        } else {
+            Log.println(Log.DEBUG, String(), "Location granted")
         }
-
-        settings = FirebaseFirestoreSettings.Builder()
-            .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
-            .build()
-
-        FirebaseUtils().fireStoreDatabase.firestoreSettings = settings
 
     }
 
@@ -83,10 +95,16 @@ class LoggedActivity : AppCompatActivity() {
 //        }
 //    }
 
+    fun locationParser(loc: String) : LatLng {
+        Log.println(Log.DEBUG, String(), "A String: $loc")
+        var fSplit=loc.split(",")
+        Log.println(Log.DEBUG, String(), fSplit.get(0))
+        var lat=fSplit.get(0).split("=").get(1)
+        Log.println(Log.DEBUG, String(), lat)
 
-    fun changeNav(){
-        navigationView.menu.clear()
-        navigationView.inflateMenu(R.menu.navdrawer_menu_logged)
+        var long=fSplit[1].split("=")[1]
+
+        return LatLng(lat.toDouble(),long.removeSuffix("}").toDouble())
     }
 
 

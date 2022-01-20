@@ -19,7 +19,7 @@
         android:icon="@android:drawable/ic_menu_my_calendar"
         android:title="@string/history" />
     <item
-        android:id="@+id/mapsActivity"
+        android:id="@+id/mapFragment"
         android:icon="@android:drawable/ic_dialog_map"
         android:title="@string/title_activity_maps" />
     <item

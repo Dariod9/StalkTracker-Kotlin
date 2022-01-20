@@ -3,6 +3,7 @@ package models
 import android.location.Location
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.google.android.gms.maps.model.LatLng
 import java.time.LocalDateTime
 import java.util.*
 
@@ -14,12 +15,22 @@ class Device {
 var time: LocalDateTime = LocalDateTime.now()
     var friend: Boolean = false
     var black: Boolean = false
+    lateinit var position: LatLng
+
+    constructor(name: String, address: String, friend : Boolean, black : Boolean, position : LatLng) {
+        this.name = name
+        this.address = address
+        this.friend=friend
+        this.black=black
+        this.position=position
+    }
 
     constructor(name: String, address: String, friend : Boolean, black : Boolean) {
         this.name = name
         this.address = address
         this.friend=friend
         this.black=black
+        this.position=LatLng(0.0,0.0)
     }
 
     override fun equals(other: Any?): Boolean {
