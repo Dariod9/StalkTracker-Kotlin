@@ -28,8 +28,10 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.internal.ManufacturerUtils
+import com.google.firebase.auth.FirebaseAuth
 import java.util.jar.Manifest
 
 // TODO: Rename parameter arguments, choose names that match
@@ -45,7 +47,9 @@ private const val ARG_PARAM2 = "param2"
 class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
 
     private lateinit var mMap: GoogleMap
+    private var auth : FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var locationManager: LocationManager
+    private lateinit var positions : ArrayList<LatLng>
     var currentLocation : Location? = null
     var fusedLocationProviderClient: FusedLocationProviderClient? = null
     val REQUEST_CODE = 101
@@ -64,19 +68,53 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         val act= activity as LoggedActivity
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(act)
 
+        positions=ArrayList()
 
 
 //        fetchLocation(act)
 
         getLocation()
+        getPositions()
+
+
 //        Log.println(Log.DEBUG, String(), "LOCATION1 : $currentLocation")
         mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        Thread.sleep(2000)
         mapFragment?.getMapAsync(this)
 //        Log.println(Log.DEBUG, String(), "LOCATION2 : $currentLocation")
 
 
 
         return rootView
+    }
+
+    private fun getPositions() {
+        auth.currentUser?.email?.let {
+            FirebaseUtils().fireStoreDatabase.collection("Users")
+                .document(it)
+                .collection("users")
+                .get()
+                .addOnSuccessListener { documents ->
+                    Log.println(Log.DEBUG, String(), "Entrou no success")
+                    for (document in documents) {
+                        if (document.data.get("positions") != "[]") {
+                            var tmp = (document.data.get("positions") as List<*>)
+                            //                        tmp.filter { it -> (it as String).length>0 }.forEach(positions.add((activity as LoggedActivity).locationParser("$it") )}
+                            for (pos in tmp) {
+                                Log.println(Log.DEBUG, String(), "Pos:"+pos.toString())
+                                positions.add((activity as LoggedActivity).locationParser(pos.toString()))
+                            }
+                        }
+                        else{
+                            positions.add(LatLng(0.0,0.0))
+                        }
+
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.println(Log.DEBUG, String(), "ERRO")
+                }
+        }
     }
 
     private fun fetchLocation(act : Activity) {
@@ -106,18 +144,36 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
 
     override fun onMapReady(googleMap: GoogleMap?) {
 
+        var markers=ArrayList<MarkerOptions>()
         Log.println(Log.DEBUG, String(), "Mapa Ready")
         mMap = googleMap!!
 
-        val lating = LatLng(-34.0, 151.0)
+//        val lating = LatLng(-34.0, 151.0)
 //        val lating = LatLng(currentLocation!!.latitude, currentLocation!!.longitude)
-        val markerOptions = MarkerOptions().position(lating).title("I AM HERE BOYY")
+//        val markerOptions = MarkerOptions().position(lating).title("I AM HERE BOYY")
         Log.println(Log.DEBUG, String(), "Mapa foi ready")
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLng(lating))
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lating, 15f))
-        mMap.addMarker(markerOptions)
-        Log.println(Log.DEBUG, String(), "Mapa não era null")
+        for(pos in positions){
+            val markerOptions = MarkerOptions().position(pos).title("TOU AQUI ZÉ")
+            mMap.addMarker(markerOptions)
+            markers.add(markerOptions)
+//            map.animateCamera(CameraUpdateFactory.newLatLng(pos))
+//            map.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15f))
+//            Log.println(Log.DEBUG, String(), "Position: "+pos)
+
+//            markers.add(MarkerOptions().position(pos).title("TOU AQUI ZÉ"))
+        }
+
+        val builder = LatLngBounds.Builder()
+        for (marker in markers) {
+            builder.include(marker.position)
+        }
+        val bounds = builder.build()
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100))
+
+//        for(marker in markers) map.addMarker(marker)
+
+        mMap.uiSettings.isMyLocationButtonEnabled = false
 
 //        mMap = googleMap!!
 //        // Add a marker in Sydney and move the camera

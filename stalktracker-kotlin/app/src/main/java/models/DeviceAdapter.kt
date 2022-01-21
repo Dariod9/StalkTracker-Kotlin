@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.text.Html
 import android.util.Log
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -85,6 +86,21 @@ class DeviceAdapter: RecyclerView.Adapter<ButtonItemViewHolder>() {
 
     }
 
+    fun stalkerAlert(context: Context?, act: LoggedActivity){
+        val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.AlertDialogTheme))
+        Log.println(Log.DEBUG, String(), "Entrou no Alerta")
+
+        with(builder)
+        {
+            setTitle("STALKER DETECTED:")
+                .setPositiveButton(Html.fromHtml("<font color='#323230'>OK</font>"),
+                    DialogInterface.OnClickListener { dialog, id ->
+                        // FIRE ZE MISSILES!
+                    })
+            show()
+        }
+    }
+
     fun removeFriendAlert(context: Context?, act: LoggedActivity, device: Device){
 
         val builder = AlertDialog.Builder(context)
@@ -137,7 +153,7 @@ class DeviceAdapter: RecyclerView.Adapter<ButtonItemViewHolder>() {
             FirebaseUtils().fireStoreDatabase.collection("Users").document(it)
                 .collection("users")
                 .document(device.address)
-                .update("friend", true, "location", device.position)
+                .update("friend", true)
                 .addOnSuccessListener {
                     Log.println(Log.DEBUG, String(), "Success")
                 }
@@ -153,7 +169,7 @@ class DeviceAdapter: RecyclerView.Adapter<ButtonItemViewHolder>() {
             FirebaseUtils().fireStoreDatabase.collection("Users").document(it)
                 .collection("users")
                 .document(device.address)
-                .update("black", true, "location", device.position)
+                .update("black", true)
                 .addOnSuccessListener {
                     Log.println(Log.DEBUG, String(), "Success")
                 }

@@ -69,14 +69,14 @@ class HIstoryFragment : Fragment() {
             override fun onItemClick(position: Int) {
                 val item = adapter.data[position]
 //                adapter.removeFriendAlert(context, act, item
-                Log.println(Log.DEBUG, String(), item.position.latitude.toString())
+                Log.println(Log.DEBUG, String(), item.positions[0].latitude.toString())
                 val bundle = bundleOf(
                     "name" to item.name,
                     "address" to item.address,
                     "friend" to item.friend.toString(),
                     "stalker" to item.black.toString(),
-                    "latitude" to item.position.latitude,
-                    "longitude" to item.position.longitude
+                    "latitude" to item.positions[0].latitude,
+                    "longitude" to item.positions[0].longitude
                 )
                 view?.findNavController()
                     ?.navigate(R.id.action_historyFragment_to_profileFragment, bundle)
@@ -147,10 +147,8 @@ class HIstoryFragment : Fragment() {
                                     document.data.get("name") as String,
                                     document.data.get("address") as String,
                                     document.data.get("friend")!! as Boolean,
-                                    document.data.get("black")!! as Boolean,
-                                    (activity as LoggedActivity).locationParser(document.data["position"].toString())
+                                    document.data.get("black")!! as Boolean)
                                 )
-                            )
                         }
                         adapter.data = dayDevices
                     }

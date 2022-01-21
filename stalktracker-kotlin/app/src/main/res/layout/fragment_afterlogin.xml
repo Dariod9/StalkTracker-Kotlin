@@ -30,10 +30,10 @@
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="105dp"
-            android:layout_height="56dp"
-            android:layout_marginStart="152dp"
-            android:layout_marginTop="29dp"
+            android:layout_width="212dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="96dp"
+            android:layout_marginTop="28dp"
             android:text="Email"
             android:textAlignment="center"
             android:textColor="@android:color/white"

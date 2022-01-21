@@ -17,6 +17,7 @@
 package com.example.android.stalktracker
 
 import android.opengl.Visibility
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -24,6 +25,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import com.example.android.stalktracker.databinding.FragmentFriendslistBinding
 import com.example.android.stalktracker.databinding.FragmentProfileBinding
@@ -40,8 +42,10 @@ import java.util.*
 
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.CameraUpdateFactory
-
-
+import com.google.android.gms.maps.model.Marker
+import com.google.firebase.auth.FirebaseAuth
+import kotlin.collections.ArrayList
+import com.google.android.gms.maps.model.LatLngBounds
 
 
 
@@ -51,8 +55,11 @@ class ProfileFragment : Fragment(), OnMapReadyCallback {
     private val adapter = DeviceAdapter()
     private lateinit var mapView : MapView
     private lateinit var map : GoogleMap
-    private lateinit var position : LatLng
+    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var position : LatLng = LatLng(0.0,0.0)
+    private lateinit var positions : ArrayList<LatLng>
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -60,19 +67,51 @@ class ProfileFragment : Fragment(), OnMapReadyCallback {
         val binding: FragmentProfileBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_profile, container, false)
 
+//        val listaPos=ArrayList<LatLng>()
+//        listaPos.add(LatLng(arguments?.getDouble("latitude")!!,arguments?.getDouble("longitude")!!))
+        positions= ArrayList()
+
         val device= Device(arguments?.getString("name").toString(),
                             arguments?.getString("address").toString(),
                             arguments?.getString("friend").toBoolean(),
                             arguments?.getString("stalker").toBoolean(),
-                            LatLng(arguments?.getDouble("latitude")!!,arguments?.getDouble("longitude")!!)
-        )
-        Log.println(Log.DEBUG, String(), device.position.latitude.toString())
-        position=device.position
+                            arguments?.getParcelableArrayList("positions")!!)
+
+
+        auth.currentUser?.email?.let {
+            FirebaseUtils().fireStoreDatabase.collection("Users")
+                .document(it)
+                .collection("users")
+                .whereEqualTo("address", device.address)
+                .get()
+                .addOnSuccessListener { documents ->
+                    Log.println(Log.DEBUG, String(), "Entrou no success")
+                    for (document in documents) {
+                        if (document.data.get("positions") != "[]") {
+                            var tmp = (document.data.get("positions") as List<*>)
+                            //                        tmp.filter { it -> (it as String).length>0 }.forEach(positions.add((activity as LoggedActivity).locationParser("$it") )}
+                            for (pos in tmp) {
+                                Log.println(Log.DEBUG, String(), "Pos:"+pos.toString())
+                                positions.add((activity as LoggedActivity).locationParser(pos.toString()))
+                            }
+                        }
+                        else{
+                            positions.add(position)
+                        }
+
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.println(Log.DEBUG, String(), "ERRO")
+                }
+        }
+
+        Log.println(Log.DEBUG, String(), device.positions.toString())
 
         binding.name.setText(device.name)
         binding.mac.setText(device.address)
-        binding.friend.setText(device.friend.toString())
-        binding.stalker.setText(device.black.toString())
+        if(device.friend) binding.friend.setText(" Friend!") else binding.friend.setText(" Not a Friend")
+        if(device.black) binding.stalker.setText(" Stalker!") else binding.stalker.setText(" Not a Stalker")
 
         if(!device.friend) binding.rmFriend.visibility=View.INVISIBLE
         if(!device.black) binding.rmStalker.visibility=View.INVISIBLE
@@ -88,9 +127,11 @@ class ProfileFragment : Fragment(), OnMapReadyCallback {
         }
 
 
+
         mapView = binding.mapView as MapView
         mapView.onCreate(savedInstanceState)
 
+        Thread.sleep(2000)
         mapView.getMapAsync(this)
 
 //        map = mapView.map;
@@ -111,9 +152,30 @@ class ProfileFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(p0: GoogleMap?) {
+        val markers=ArrayList<MarkerOptions>()
+
+        Log.println(Log.DEBUG, String(), "Positions: "+positions)
+
         map = p0!!
-        val markerOptions = MarkerOptions().position(position).title("TOU AQUI ZÉ")
-        map.addMarker(markerOptions)
+//        val markerOptions = MarkerOptions().position(position).title("TOU AQUI ZÉ")
+        for(pos in positions){
+            val markerOptions = MarkerOptions().position(pos).title("TOU AQUI ZÉ")
+            map.addMarker(markerOptions)
+            markers.add(markerOptions)
+//            map.animateCamera(CameraUpdateFactory.newLatLng(pos))
+//            map.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15f))
+//            Log.println(Log.DEBUG, String(), "Position: "+pos)
+
+//            markers.add(MarkerOptions().position(pos).title("TOU AQUI ZÉ"))
+        }
+        val builder = LatLngBounds.Builder()
+        for (marker in markers) {
+            builder.include(marker.position)
+        }
+        val bounds = builder.build()
+        map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100))
+
+//        for(marker in markers) map.addMarker(marker)
 
         map.uiSettings.isMyLocationButtonEnabled = false
 //        map.isMyLocationEnabled = true
@@ -141,8 +203,7 @@ class ProfileFragment : Fragment(), OnMapReadyCallback {
         // Updates the location and zoom of the MapView
         /*CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(43.1, -87.9), 10);
         map.animateCamera(cameraUpdate);*/
-        map.animateCamera(CameraUpdateFactory.newLatLng(position))
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15f))
+
 
     }
 

@@ -27,4 +27,11 @@
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/fui_bgFacebook</item>
     </style>
+    <style name="AlertDialogTheme" parent="@android:style/Theme.Dialog">
+        <item name="colorAccent">@color/fui_bgEmail</item>
+        <item name="colorBackgroundFloating">@color/fui_bgEmail</item>
+<!--        <item name="and">@color/fui_bgEmail</item>-->
+        <item name="android:typeface">monospace</item>
+        <item name="android:textSize">10sp</item>
+    </style>
 </resources>

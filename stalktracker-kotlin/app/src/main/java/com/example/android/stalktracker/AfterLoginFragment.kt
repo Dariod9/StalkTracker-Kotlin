@@ -23,6 +23,7 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.*
 import android.content.pm.PackageManager
+import android.hardware.biometrics.BiometricManager
 import android.location.Location
 import android.location.LocationListener
 import android.os.Bundle
@@ -48,15 +49,18 @@ import com.google.android.gms.maps.model.LatLng
 
 import models.Device
 import models.DeviceAdapter
+import java.text.DecimalFormat
 import java.time.LocalDateTime
 
 class AfterLoginFragment : Fragment(), LocationListener {
     private lateinit var auth: FirebaseAuth
     private val adapter = DeviceAdapter()
-    private var location : LatLng= LatLng(0.0,0.0)
+    private var location: LatLng = LatLng(0.0, 0.0)
+//    private var positions: ArrayList<LatLng> = ArrayList()
 
     private lateinit var locationManager: LocationManager
     private var m_devices: ArrayList<Device> = ArrayList()
+    private var addresses: ArrayList<String> = ArrayList()
     private var friendsAdresses: ArrayList<String> = ArrayList()
 
 
@@ -101,6 +105,7 @@ class AfterLoginFragment : Fragment(), LocationListener {
 
 
         getLocation()
+        getFriends()
 
 
         //BT
@@ -120,7 +125,10 @@ class AfterLoginFragment : Fragment(), LocationListener {
         binding.searchButton.setOnClickListener {
             Log.println(Log.DEBUG, String(), "Carregou")
             m_devices.clear()
+            addresses= ArrayList()
+            Log.println(Log.DEBUG, String(), "Addresses:"+addresses);
 
+            adapter.data=ArrayList()
             if (!m_bluetoothAdapter!!.isEnabled) {
                 val enableBT = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
                 startActivityForResult(enableBT, 1)
@@ -152,50 +160,122 @@ class AfterLoginFragment : Fragment(), LocationListener {
 
     fun getFriends() {
 
-        val devices = FirebaseUtils().fireStoreDatabase.collection("Users")
-            .document("dcmatos.99@gmail.com")
-            .collection("users")
-            .whereEqualTo("friend", true)
-            .get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    friendsAdresses.add((document.data.get("address").toString()))
-                    Log.println(Log.DEBUG, String(), "É ISTO:")
-                    Log.println(
-                        Log.DEBUG,
-                        String(),
-                        "É ISTO: " + "${document.id} => ${document.data}"
-                    )
+        auth.currentUser?.email?.let {
+
+            friendsAdresses = ArrayList()
+            FirebaseUtils().fireStoreDatabase.collection("Users")
+                .document(it)
+                .collection("users")
+                .whereEqualTo("friend", true)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+//                    Log.println(
+//                        Log.DEBUG,
+//                        String(),
+//                        (document.data.get("positions") as List<*>)[0].toString()
+//                    )
+                        friendsAdresses.add((document.data.get("address").toString()))
+//                    Log.println(
+//                        Log.DEBUG,
+//                        String(),
+//                        "É FRIEND: " + "${document.id} => ${document.data}"
+//                    )
+                    }
                 }
-            }
-            .addOnFailureListener { exception ->
-                Log.println(Log.DEBUG, String(), "ERRO")
-            }
+                .addOnFailureListener { exception ->
+                    Log.println(Log.DEBUG, String(), "ERRO")
+                }
+
+
+            FirebaseUtils().fireStoreDatabase.collection("Users")
+//            .document("dcmatos.99@gmail.com")
+//            .collection("users")
+//            .whereEqualTo("black", true)
+//            .get()
+//            .addOnSuccessListener { documents ->
+//                for (document in documents) {
+////                    Log.println(
+////                        Log.DEBUG,
+////                        String(),
+////                        (document.data.get("positions") as List<*>)[0].toString()
+////                    )
+//                    friendsAdresses.add((document.data.get("address").toString()))
+//                    Log.println(Log.DEBUG, String(), "É ISTO:")
+//                    Log.println(
+//                        Log.DEBUG,
+//                        String(),
+//                        "É ISTO: " + "${document.id} => ${document.data}"
+//                    )
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.println(Log.DEBUG, String(), "ERRO")
+//            }
+
+        }
+//
+//        FirebaseUtils().fireStoreDatabase.collection("Users")
+//            .document("dcmatos.99@gmail.com")
+//            .collection("users")
+//            .whereEqualTo("black", true)
+//            .get()
+//            .addOnSuccessListener { documents ->
+//                for (document in documents) {
+////                    Log.println(
+////                        Log.DEBUG,
+////                        String(),
+////                        (document.data.get("positions") as List<*>)[0].toString()
+////                    )
+//                    friendsAdresses.add((document.data.get("address").toString()))
+//                    Log.println(Log.DEBUG, String(), "É ISTO:")
+//                    Log.println(
+//                        Log.DEBUG,
+//                        String(),
+//                        "É ISTO: " + "${document.id} => ${document.data}"
+//                    )
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.println(Log.DEBUG, String(), "ERRO")
+//            }
     }
 
 
     private fun getLocation() {
-        locationManager = (activity as LoggedActivity)!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if ((ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
-            ActivityCompat.requestPermissions(activity as LoggedActivity, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 2)
+        locationManager =
+            (activity as LoggedActivity)!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if ((ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED)
+        ) {
+            ActivityCompat.requestPermissions(
+                activity as LoggedActivity,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                2
+            )
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 5f, this)
     }
 
     override fun onLocationChanged(location: Location) {
 //        currentLocation=location
-        this.location=LatLng(location.latitude, location.longitude)
+        this.location = LatLng(location.latitude, location.longitude)
         Log.println(Log.DEBUG, String(), "LOCATION : ${location.latitude} , ${location.longitude}")
 
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         if (requestCode == 2) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.println(Log.DEBUG, String(), "GRANTED")
 
-            }
-            else {
+            } else {
                 Log.println(Log.DEBUG, String(), "DENIED")
 
             }
@@ -218,24 +298,41 @@ class AfterLoginFragment : Fragment(), LocationListener {
                 val device =
                     intent.getParcelableExtra<Parcelable>(BluetoothDevice.EXTRA_DEVICE) as BluetoothDevice?
                 if (device != null) {
-                    val newdev :Device
-                    if(device.name!=null)
-                        newdev = Device(device.name, device.address, false, false, location)
-                    else newdev = Device(device.address,device.address, false,false,location)
-                    if (!friendsAdresses.contains(newdev.address)) {
-                        m_devices.add(newdev)
-                        auth.currentUser?.email?.let {
-                            FirebaseUtils().fireStoreDatabase.collection("Users").document(it)
-                                .collection("users")
-                                .document(newdev.address)
-                                .set(newdev)
-                                .addOnSuccessListener {
-                                    Log.println(Log.DEBUG, String(), "Added document ")
-                                }
-                                .addOnFailureListener { exception ->
-                                    Log.println(Log.DEBUG, String(), "Error adding document")
-                                }
-                        }
+//                    val newdev: Device
+                    var name: String
+                    if (device.name != null) name = device.name
+//
+//                        positions.clear()
+//                        positions.add(location)
+//                        newdev = Device(device.name, device.address, false, false, positions)}
+                    else name = device.address
+                    checkStalker(device.address)
+//                    newdev = Device(device.address, device.address, false, false, positions)
+                    if (!friendsAdresses.contains(device.address) && (!addresses.contains(device.address))) {
+
+                        Log.println(Log.DEBUG, String(), "Endereço: " + device.address)
+                        Log.println(Log.DEBUG, String(), "Friends:: " + friendsAdresses)
+                        Log.println(Log.DEBUG, String(), "Addresses:: " + addresses)
+
+                        m_devices.add(Device(name, device.address, false, false))
+                        addresses.add(device.address)
+                        insertDevice(name, device.address)
+//                        Log.println(Log.DEBUG, String(), "Devices : "+ m_devices)
+
+//                        m_devices.add(newdev)
+//                        Log.println(Log.DEBUG, String(), newdev.toString())
+//                        auth.currentUser?.email?.let {
+//                            FirebaseUtils().fireStoreDatabase.collection("Users").document(it)
+//                                .collection("users")
+//                                .document(device.address)
+//                                .set(newdev)
+//                                .addOnSuccessListener {
+//                                    Log.println(Log.DEBUG, String(), "Added document ")
+//                                }
+//                                .addOnFailureListener { exception ->
+//                                    Log.println(Log.DEBUG, String(), "Error adding document")
+//                                }
+//                        }
 
                     }
                 }
@@ -244,6 +341,129 @@ class AfterLoginFragment : Fragment(), LocationListener {
                 Log.println(Log.DEBUG, String(), "Found device " + adapter.data.size.toString())
             }
         }
+    }
+
+    private fun checkStalker(address: String?) {
+        auth.currentUser?.email?.let {
+            FirebaseUtils().fireStoreDatabase.collection("Users")
+                .document(it)
+                .collection("users")
+                .whereEqualTo("black", true)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        if(document.data["address"].toString()==address)
+                            adapter.stalkerAlert(context, (activity as LoggedActivity))
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.println(Log.DEBUG, String(), "ERRO")
+                }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun insertDevice(name: String, address: String) {
+        var positions = ArrayList<LatLng>()
+        var device: Device = Device("", "", false, false, positions)
+
+
+        auth.currentUser?.email?.let {
+            FirebaseUtils().fireStoreDatabase.collection("Users")
+                .document(it)
+                .collection("users")
+                .whereEqualTo("address", address)
+                .get()
+                .addOnSuccessListener { documents ->
+                    Log.println(Log.DEBUG, String(), "Endereço procurado: " + address)
+                    Log.println(Log.DEBUG, String(), "Lista: " + documents.size())
+
+                    if (documents.size() > 0) {
+                        for (document in documents) {
+                            Log.println(Log.DEBUG, String(), "Device encontrado: " + document.data)
+
+                            if (document.data.get("positions") != null) {
+                                var tmp = (document.data.get("positions") as List<*>)
+                                //                        tmp.filter { it -> (it as String).length>0 }.forEach(positions.add((activity as LoggedActivity).locationParser("$it") )}
+                                for (pos in tmp) {
+                                    Log.println(Log.DEBUG, String(), "Pos:"+pos.toString())
+                                    positions.add((activity as LoggedActivity).locationParser(pos.toString()))
+                                }
+                            }
+                            positions.add(location)
+                            Log.println(Log.DEBUG, String(), positions.toString())
+
+                            device = Device(
+                                document.data["name"].toString(),
+                                document.data["address"].toString(),
+                                document.data["friend"].toString().toBoolean(),
+                                document.data["stalker"].toString().toBoolean(),
+                                positions
+                            )
+
+                            m_devices.add(device)
+
+                            auth.currentUser?.email?.let {
+                                FirebaseUtils().fireStoreDatabase.collection("Users").document(it)
+                                    .collection("users")
+                                    .document(address)
+                                    .update("positions", positions)
+                                    .addOnSuccessListener {
+                                        Log.println(Log.DEBUG, String(), "Added document ")
+                                    }
+                                    .addOnFailureListener { exception ->
+                                        Log.println(Log.DEBUG, String(), "Error adding document")
+                                    }
+                            }
+                            //                        positions.add()
+                            //                            Log.println(
+                            //                                Log.DEBUG,
+                            //                                String(),
+                            //                                (document.data.get("positions") as List<*>)[0].toString()
+                            //                            )
+                            //                        friendsAdresses.add((document.data.get("address").toString()))
+                            //                        Log.println(Log.DEBUG, String(), "É ISTO:")
+                            //                        Log.println(
+                            //                            Log.DEBUG,
+                            //                            String(),
+                            //                            "É ISTO: " + "${document.id} => ${document.data}"
+                            //                        )
+                        }
+                    } else {
+                        positions.add(location)
+
+                        device = Device(
+                            name,
+                            address,
+                            false,
+                            false,
+                            positions
+                        )
+
+//                        m_devices.add(device)
+
+                        auth.currentUser?.email?.let {
+                            FirebaseUtils().fireStoreDatabase.collection("Users").document(it)
+                                .collection("users")
+                                .document(device.address)
+                                .set(device)
+                                .addOnSuccessListener {
+
+                                    Log.println(Log.DEBUG, String(), "Added document ")
+                                }
+                                .addOnFailureListener { exception ->
+                                    Log.println(Log.DEBUG, String(), "Error adding document")
+                                }
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.println(Log.DEBUG, String(), "ERRO")
+                }
+        }
+//        Thread.sleep(2000)
+//        adapter.data=m_devices
+//        Log.println(Log.DEBUG, String(), "DEvices : "+ m_devices)
     }
 
 }

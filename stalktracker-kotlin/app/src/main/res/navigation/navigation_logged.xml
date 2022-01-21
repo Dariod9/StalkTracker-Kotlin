@@ -70,4 +70,8 @@
         android:name="com.example.android.stalktracker.MapFragment"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" />
+    <fragment
+        android:id="@+id/statsFragment"
+        android:name="com.example.android.stalktracker.StatsFragment"
+        android:label="Statistics" />
 </navigation>

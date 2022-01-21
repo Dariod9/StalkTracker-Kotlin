@@ -23,6 +23,10 @@
         android:icon="@android:drawable/ic_dialog_map"
         android:title="@string/title_activity_maps" />
     <item
+        android:id="@+id/statsFragment"
+        android:icon="@android:drawable/ic_dialog_info"
+        android:title="Statistics" />
+    <item
         android:id="@+id/aboutFragment2"
         android:icon="@android:drawable/ic_dialog_info"
         android:title="@string/about" />
