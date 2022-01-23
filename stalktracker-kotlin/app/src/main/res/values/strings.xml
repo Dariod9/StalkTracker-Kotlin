@@ -42,4 +42,5 @@
     <string name="blacklist">Black List</string>
     <string name="history">History</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="notifications">Notifications</string>
 </resources>

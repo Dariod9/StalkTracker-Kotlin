@@ -16,27 +16,36 @@
 
 package com.example.android.stalktracker
 
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.example.android.stalktracker.databinding.ActivityMainBinding
-import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
     lateinit var auth : FirebaseAuth
-    lateinit var navigationView: NavigationView
+    private lateinit var navigationView: NavigationView
+    private var isNotificationOn : Boolean = false
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         @Suppress("UNUSED_VARIABLE")
@@ -46,6 +55,8 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
         NavigationUI.setupWithNavController(binding.navView, navController)
         navigationView=findViewById(R.id.navView)
+
+        createNotificationChannel()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -62,6 +73,93 @@ class MainActivity : AppCompatActivity() {
         navigationView.inflateMenu(R.menu.navdrawer_menu_logged)
 //        val appBarConfiguration = AppBarConfiguration(setOf(R.id.firstFragment, R.id.secondFragment))
 //        NavigationUI.navigateUp(navController, drawerLayout)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.option_menu, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        super.onPrepareOptionsMenu(menu)
+        val item = menu.findItem(R.id.notifications)
+        if (isNotificationOn){
+            item.setIcon(R.drawable.ic_baseline_notifications_24)
+        }
+        else {
+            item.setIcon(R.drawable.ic_baseline_notifications_off_24)
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.notifications){
+            if (isNotificationOn){
+                cancelRecurringNotification()
+                Toast.makeText(applicationContext,"Notifications off",Toast.LENGTH_SHORT).show()
+            }
+            else{
+                scheduleRecurringNotification()
+                Toast.makeText(applicationContext,"Notifications on",Toast.LENGTH_SHORT).show()
+            }
+            isNotificationOn = !isNotificationOn
+            invalidateOptionsMenu()
+            return true
+        }
+        return NavigationUI.onNavDestinationSelected(item, findNavController(R.id.myNavHostFragment))
+                || super.onOptionsItemSelected(item)
+    }
+
+    private fun getPendingIntent(): PendingIntent {
+        val intent = Intent(applicationContext, Notification::class.java)
+
+        return PendingIntent.getBroadcast(
+            applicationContext,
+            notificationID,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
+    private fun getAlarmManager(): AlarmManager {
+        return getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    }
+
+    private fun scheduleRecurringNotification(){
+        val pendingIntent = getPendingIntent()
+
+        val updateTime: Calendar = Calendar.getInstance()
+        updateTime.timeZone = TimeZone.getTimeZone("GMT")
+        updateTime.set(Calendar.HOUR_OF_DAY, 12)
+        updateTime.set(Calendar.MINUTE, 0)
+
+        val alarmManager = getAlarmManager()
+        alarmManager.setInexactRepeating(
+            AlarmManager.RTC_WAKEUP,
+            updateTime.timeInMillis,
+            AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+            pendingIntent
+        )
+    }
+
+    private fun cancelRecurringNotification(){
+        val pendingIntent = getPendingIntent()
+
+        val alarmManager = getAlarmManager()
+        alarmManager.cancel(pendingIntent)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel(){
+        val name = "Notification Channel"
+        val description = "A description of the channel"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+
+        val channel = NotificationChannel(channelID, name, importance)
+        channel.description = description
+
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
 //    fun checkLogged() {
