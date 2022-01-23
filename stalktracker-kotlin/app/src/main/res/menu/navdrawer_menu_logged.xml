@@ -34,5 +34,10 @@
         android:id="@+id/contactFragment2"
         android:icon="@android:drawable/stat_sys_phone_call"
         android:title="@string/contactUs" />
+    <item
+        android:id="@+id/logout"
+        android:icon="@android:drawable/ic_lock_power_off"
+        android:iconTint="@color/fui_bgEmail"
+        android:title="Logout" />
 
 </menu>

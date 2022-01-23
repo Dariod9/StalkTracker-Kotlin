@@ -47,6 +47,7 @@ private const val ARG_PARAM2 = "param2"
 class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
 
     private lateinit var mMap: GoogleMap
+    private var names : ArrayList<String> = ArrayList()
     private var auth : FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var locationManager: LocationManager
     private lateinit var positions : ArrayList<LatLng>
@@ -101,11 +102,13 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
                             var tmp = (document.data.get("positions") as List<*>)
                             //                        tmp.filter { it -> (it as String).length>0 }.forEach(positions.add((activity as LoggedActivity).locationParser("$it") )}
                             for (pos in tmp) {
+                                names.add(document.data["name"].toString())
                                 Log.println(Log.DEBUG, String(), "Pos:"+pos.toString())
                                 positions.add((activity as LoggedActivity).locationParser(pos.toString()))
                             }
                         }
                         else{
+                            names.add(document.data["name"].toString())
                             positions.add(LatLng(0.0,0.0))
                         }
 
@@ -154,7 +157,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         Log.println(Log.DEBUG, String(), "Mapa foi ready")
 
         for(pos in positions){
-            val markerOptions = MarkerOptions().position(pos).title("TOU AQUI ZÉ")
+            val markerOptions = MarkerOptions().position(pos).title(names.get(positions.indexOf(pos)))
             mMap.addMarker(markerOptions)
             markers.add(markerOptions)
 //            map.animateCamera(CameraUpdateFactory.newLatLng(pos))

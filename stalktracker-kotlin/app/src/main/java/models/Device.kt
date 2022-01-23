@@ -18,14 +18,16 @@ var time: LocalDateTime= LocalDateTime.now()
     var friend: Boolean = false
     var black: Boolean = false
     lateinit var positions: ArrayList<LatLng>
+    var nPos : Int = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
-    constructor(name: String, address: String, friend : Boolean, black : Boolean, positions : ArrayList<LatLng>) {
+    constructor(name: String, address: String, friend : Boolean, black : Boolean, positions : ArrayList<LatLng>, nPos : Int) {
         this.name = name
         this.address = address
         this.friend=friend
         this.black=black
         this.positions=positions
+        this.nPos=nPos
         Log.println(Log.DEBUG, String(), time.toString())
     }
 
@@ -35,17 +37,13 @@ var time: LocalDateTime= LocalDateTime.now()
         this.friend=friend
         this.black=black
         this.positions=ArrayList<LatLng>()
+        this.nPos=positions.size
     }
 
     override fun equals(other: Any?): Boolean {
         return this.name.equals((other as Device).name)
     }
 
-    fun isSameLocation(pos1 : LatLng, pos2 : LatLng) : Boolean{
-
-        return abs(abs(pos1.latitude)-abs(pos2.latitude))<1 && (abs(abs(pos1.longitude)-abs(pos2.longitude))<1)
-
-    }
 
     override fun toString() : String{
         return this.name+"-"+this.address+"-"+this.friend+"-"+this.black+"-"+this.positions

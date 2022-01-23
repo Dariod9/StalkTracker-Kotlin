@@ -25,7 +25,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import com.example.android.stalktracker.databinding.FragmentGameWonBinding
+import androidx.navigation.findNavController
 import com.example.android.stalktracker.databinding.FragmentSignupBinding
 import com.example.android.stalktracker.databinding.FragmentTitleBinding
 import com.google.android.material.snackbar.Snackbar
@@ -45,6 +45,8 @@ class SignUpFragment : Fragment() {
         binding.signUp.setOnClickListener {
             Log.println(Log.DEBUG, String(), "CARREGOU")
             register(binding.editTextTextEmailAddress.text.toString(), binding.editTextTextPassword.text.toString())
+
+
         }
 
         // Inflate the layout for this fragment
@@ -59,15 +61,18 @@ class SignUpFragment : Fragment() {
             if(task.isSuccessful){
 //                val mySnackbar = view?.let { Snackbar.make(it,"Registration Succesfull!", 3) }
                 Toast.makeText(activity?.applicationContext,"Registration Succesfull!",Toast.LENGTH_SHORT).show()
+                view?.findNavController()?.navigate(R.id.action_signUpFragment_to_titleFragment)
 //                Log.println(Log.DEBUG, String(), "DEU")
 
             }
         }.addOnFailureListener { exception ->
 //            val mySnackbar = view?.let { Snackbar.make(it, "ERROR!", 4) }
-            Toast.makeText(activity?.applicationContext,"ERROR",Toast.LENGTH_SHORT).show()
+            val toast = Toast.makeText(context, "Registrarion failed : "+exception, Toast.LENGTH_LONG)
+            toast.show()
 
 //            Log.println(Log.DEBUG, String(), "NÃO DEU")
 
         }
+
     }
 }

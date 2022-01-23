@@ -17,6 +17,7 @@
 package com.example.android.stalktracker
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -59,6 +60,13 @@ class LoggedActivity : AppCompatActivity() {
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
         NavigationUI.setupWithNavController(binding.navView, navController)
         navigationView=findViewById(R.id.navView)
+
+        navigationView.menu.findItem(R.id.logout).setOnMenuItemClickListener { menuItem ->
+            finish()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            true
+        }
 
 //        var settings = firestoreSettings {
 //            isPersistenceEnabled = true

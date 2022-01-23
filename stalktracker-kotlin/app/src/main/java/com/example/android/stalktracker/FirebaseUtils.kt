@@ -16,17 +16,28 @@ class FirebaseUtils {
 //        return true
 //    }
 
+    var initialized = false
     val fireStoreDatabase = giveDB()
 
     private fun giveDB(): FirebaseFirestore {
 
-        val settings= FirebaseFirestoreSettings.Builder()
+        var db : FirebaseFirestore
+
+        if(!initialized) {
+            val settings = FirebaseFirestoreSettings.Builder()
 //            .isPersistenceEnabled()
-            .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
-            .build()
-        val db=FirebaseFirestore.getInstance()
-        Log.println(Log.DEBUG, String(), db.firestoreSettings.isPersistenceEnabled.toString())
-        db.firestoreSettings=settings
+                .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
+                .build()
+            db = FirebaseFirestore.getInstance()
+            Log.println(Log.DEBUG, String(), db.firestoreSettings.isPersistenceEnabled.toString())
+            db.firestoreSettings = settings
+
+            this.initialized=true
+        }
+        else{
+            db = FirebaseFirestore.getInstance()
+
+        }
 
         return db
     }

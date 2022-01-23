@@ -27,6 +27,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import com.example.android.stalktracker.databinding.FragmentFriendslistBinding
 import com.example.android.stalktracker.databinding.FragmentProfileBinding
 import com.example.android.stalktracker.databinding.FragmentProfileBindingImpl
@@ -53,6 +54,7 @@ import com.google.android.gms.maps.model.LatLngBounds
 
 class ProfileFragment : Fragment(), OnMapReadyCallback {
     private val adapter = DeviceAdapter()
+    private var name : String = ""
     private lateinit var mapView : MapView
     private lateinit var map : GoogleMap
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -74,9 +76,9 @@ class ProfileFragment : Fragment(), OnMapReadyCallback {
         val device= Device(arguments?.getString("name").toString(),
                             arguments?.getString("address").toString(),
                             arguments?.getString("friend").toBoolean(),
-                            arguments?.getString("stalker").toBoolean(),
-                            arguments?.getParcelableArrayList("positions")!!)
+                            arguments?.getString("stalker").toBoolean())
 
+        name=device.name
 
         auth.currentUser?.email?.let {
             FirebaseUtils().fireStoreDatabase.collection("Users")
@@ -118,7 +120,9 @@ class ProfileFragment : Fragment(), OnMapReadyCallback {
 
         binding.rmStalker.setOnClickListener {
             val act = activity as LoggedActivity
-            adapter.removeStalkerAlert(context, act, device)
+            if(adapter.removeStalkerAlert(context, act, device))
+                view?.findNavController()?.navigate(R.id.action_profileFragment_to_afterLoginFragment)
+
         }
 
         binding.rmFriend.setOnClickListener {
@@ -159,7 +163,7 @@ class ProfileFragment : Fragment(), OnMapReadyCallback {
         map = p0!!
 //        val markerOptions = MarkerOptions().position(position).title("TOU AQUI ZÉ")
         for(pos in positions){
-            val markerOptions = MarkerOptions().position(pos).title("TOU AQUI ZÉ")
+            val markerOptions = MarkerOptions().position(pos).title(name)
             map.addMarker(markerOptions)
             markers.add(markerOptions)
 //            map.animateCamera(CameraUpdateFactory.newLatLng(pos))

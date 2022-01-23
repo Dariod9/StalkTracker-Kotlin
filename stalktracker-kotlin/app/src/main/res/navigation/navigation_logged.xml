@@ -54,7 +54,11 @@
         android:id="@+id/profileFragment"
         android:name="com.example.android.stalktracker.ProfileFragment"
         android:label="ProfileFragment"
-        tools:layout="@layout/fragment_profile"/>
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_afterLoginFragment"
+            app:destination="@id/afterLoginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/deviceFragment"
         android:name="com.example.android.stalktracker.DeviceFragment"
@@ -73,5 +77,12 @@
     <fragment
         android:id="@+id/statsFragment"
         android:name="com.example.android.stalktracker.StatsFragment"
-        android:label="Statistics" />
+        android:label="Statistics" >
+        <action
+            android:id="@+id/action_statsFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_statsFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
+    </fragment>
 </navigation>

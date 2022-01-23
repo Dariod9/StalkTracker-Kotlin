@@ -148,10 +148,10 @@ class AfterLoginFragment : Fragment(), LocationListener {
         return binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.options_menu, menu)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        super.onCreateOptionsMenu(menu, inflater)
+//        inflater.inflate(R.menu.options_menu, menu)
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return NavigationUI.onNavDestinationSelected(item, requireView().findNavController())
@@ -170,17 +170,7 @@ class AfterLoginFragment : Fragment(), LocationListener {
                 .get()
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
-//                    Log.println(
-//                        Log.DEBUG,
-//                        String(),
-//                        (document.data.get("positions") as List<*>)[0].toString()
-//                    )
                         friendsAdresses.add((document.data.get("address").toString()))
-//                    Log.println(
-//                        Log.DEBUG,
-//                        String(),
-//                        "É FRIEND: " + "${document.id} => ${document.data}"
-//                    )
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -189,56 +179,9 @@ class AfterLoginFragment : Fragment(), LocationListener {
 
 
             FirebaseUtils().fireStoreDatabase.collection("Users")
-//            .document("dcmatos.99@gmail.com")
-//            .collection("users")
-//            .whereEqualTo("black", true)
-//            .get()
-//            .addOnSuccessListener { documents ->
-//                for (document in documents) {
-////                    Log.println(
-////                        Log.DEBUG,
-////                        String(),
-////                        (document.data.get("positions") as List<*>)[0].toString()
-////                    )
-//                    friendsAdresses.add((document.data.get("address").toString()))
-//                    Log.println(Log.DEBUG, String(), "É ISTO:")
-//                    Log.println(
-//                        Log.DEBUG,
-//                        String(),
-//                        "É ISTO: " + "${document.id} => ${document.data}"
-//                    )
-//                }
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.println(Log.DEBUG, String(), "ERRO")
-//            }
 
         }
-//
-//        FirebaseUtils().fireStoreDatabase.collection("Users")
-//            .document("dcmatos.99@gmail.com")
-//            .collection("users")
-//            .whereEqualTo("black", true)
-//            .get()
-//            .addOnSuccessListener { documents ->
-//                for (document in documents) {
-////                    Log.println(
-////                        Log.DEBUG,
-////                        String(),
-////                        (document.data.get("positions") as List<*>)[0].toString()
-////                    )
-//                    friendsAdresses.add((document.data.get("address").toString()))
-//                    Log.println(Log.DEBUG, String(), "É ISTO:")
-//                    Log.println(
-//                        Log.DEBUG,
-//                        String(),
-//                        "É ISTO: " + "${document.id} => ${document.data}"
-//                    )
-//                }
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.println(Log.DEBUG, String(), "ERRO")
-//            }
+
     }
 
 
@@ -365,7 +308,7 @@ class AfterLoginFragment : Fragment(), LocationListener {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun insertDevice(name: String, address: String) {
         var positions = ArrayList<LatLng>()
-        var device: Device = Device("", "", false, false, positions)
+        var device: Device
 
 
         auth.currentUser?.email?.let {
@@ -390,7 +333,7 @@ class AfterLoginFragment : Fragment(), LocationListener {
                                     positions.add((activity as LoggedActivity).locationParser(pos.toString()))
                                 }
                             }
-                            positions.add(location)
+                            if(location.latitude!=0.0 && location.longitude!=0.0)positions.add(location)
                             Log.println(Log.DEBUG, String(), positions.toString())
 
                             device = Device(
@@ -398,7 +341,7 @@ class AfterLoginFragment : Fragment(), LocationListener {
                                 document.data["address"].toString(),
                                 document.data["friend"].toString().toBoolean(),
                                 document.data["stalker"].toString().toBoolean(),
-                                positions
+                                positions, positions.size
                             )
 
                             m_devices.add(device)
@@ -407,7 +350,7 @@ class AfterLoginFragment : Fragment(), LocationListener {
                                 FirebaseUtils().fireStoreDatabase.collection("Users").document(it)
                                     .collection("users")
                                     .document(address)
-                                    .update("positions", positions)
+                                    .update("positions", positions, "npos", positions.size)
                                     .addOnSuccessListener {
                                         Log.println(Log.DEBUG, String(), "Added document ")
                                     }
@@ -430,14 +373,14 @@ class AfterLoginFragment : Fragment(), LocationListener {
                             //                        )
                         }
                     } else {
-                        positions.add(location)
+                        if(location.latitude!=0.0 && location.longitude!=0.0)positions.add(location)
 
                         device = Device(
                             name,
                             address,
                             false,
                             false,
-                            positions
+                            positions, positions.size
                         )
 
 //                        m_devices.add(device)

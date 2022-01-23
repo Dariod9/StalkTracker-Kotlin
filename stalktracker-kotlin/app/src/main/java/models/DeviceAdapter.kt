@@ -124,8 +124,8 @@ class DeviceAdapter: RecyclerView.Adapter<ButtonItemViewHolder>() {
         }
     }
 
-    fun removeStalkerAlert(context: Context?, act: LoggedActivity, device: Device){
-
+    fun removeStalkerAlert(context: Context?, act: LoggedActivity, device: Device) : Boolean{
+        var result=false
         val builder = AlertDialog.Builder(context)
         Log.println(Log.DEBUG, String(), "Entrou no Alerta")
 
@@ -135,6 +135,7 @@ class DeviceAdapter: RecyclerView.Adapter<ButtonItemViewHolder>() {
                 .setPositiveButton(Html.fromHtml("<font color='#323230'>Yes</font>"),
                     DialogInterface.OnClickListener { dialog, id ->
                         removeStalker(device)
+                        result=true
                         // FIRE ZE MISSILES!
                     })
                 .setNegativeButton(Html.fromHtml("<font color='#323230'>No</font>"),
@@ -145,6 +146,8 @@ class DeviceAdapter: RecyclerView.Adapter<ButtonItemViewHolder>() {
 
             show()
         }
+
+        return result
     }
 
 

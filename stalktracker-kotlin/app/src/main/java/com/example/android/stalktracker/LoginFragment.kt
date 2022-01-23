@@ -31,8 +31,7 @@ import com.example.android.stalktracker.databinding.FragmentSignupBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import android.content.Intent
-
-
+import android.widget.Toast
 
 
 class LoginFragment : Fragment() {
@@ -59,6 +58,8 @@ class LoginFragment : Fragment() {
             if(task.isSuccessful){
 //                val mySnackbar = view?.let { Snackbar.make(it,"Login Succesfull!", 3) }
                 Log.println(Log.DEBUG, String(), "DEU")
+                val toast = Toast.makeText(context, "Logging in..", Toast.LENGTH_LONG)
+                toast.show()
 //                (activity as MainActivity).changeNav()
 //                view?.findNavController()?.navigate(R.id.action_loginFragment_to_afterLoginFragment)
                 val intent = Intent(activity, LoggedActivity::class.java)
@@ -68,6 +69,8 @@ class LoginFragment : Fragment() {
         }.addOnFailureListener { exception ->
 //            val mySnackbar = view?.let { Snackbar.make(it,"ERROR!", 3) }
             Log.println(Log.DEBUG, String(), "NÃO DEU")
+            val toast = Toast.makeText(context, "Error: "+exception, Toast.LENGTH_LONG)
+            toast.show()
 
 
         }
