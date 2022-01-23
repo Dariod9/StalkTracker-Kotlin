@@ -32,23 +32,27 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="104dp"
+            android:layout_marginTop="88dp"
             android:text="Contact Us"
             android:textColor="@android:color/white"
             android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="105dp"
             android:layout_height="56dp"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="120dp"
             android:text="Dário Matos"
             android:textColor="@android:color/white"
             android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.039"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -56,8 +60,8 @@
             android:id="@+id/imageView"
             android:layout_width="128dp"
             android:layout_height="146dp"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="60dp"
             android:background="@drawable/round_outline"
             android:cropToPadding="false"
             android:src="@drawable/dario"
@@ -65,11 +69,23 @@
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <ImageView
+            android:id="@+id/myImageView"
+            android:layout_width="211dp"
+            android:layout_height="213dp"
+            android:layout_centerInParent="true"
+            android:contentDescription="QR Code"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
             android:id="@+id/imageView3"
             android:layout_width="133dp"
             android:layout_height="170dp"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="56dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="76dp"
             android:src="@drawable/pedro"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView" />
@@ -79,10 +95,12 @@
             android:layout_width="114dp"
             android:layout_height="82dp"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="124dp"
+            android:layout_marginTop="152dp"
             android:text="Pedro Almeida"
             android:textColor="@android:color/white"
             android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.144"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 

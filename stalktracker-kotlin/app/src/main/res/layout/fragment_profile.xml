@@ -31,13 +31,13 @@
             android:id="@+id/friend"
             android:layout_width="287dp"
             android:layout_height="28dp"
-            android:layout_marginStart="60dp"
             android:layout_marginTop="40dp"
             android:drawableLeft="@android:drawable/star_big_on"
             android:text="Friend"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mac" />
 
@@ -45,17 +45,17 @@
             android:id="@+id/name"
             android:layout_width="288dp"
             android:layout_height="54dp"
-            android:layout_marginStart="40dp"
             android:layout_marginTop="68dp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeStepGranularity="2sp"
+            android:autoSizeTextType="uniform"
             android:drawableLeft="@mipmap/logo_round"
             android:text="Nome"
-            android:autoSizeTextType="uniform"
-            android:autoSizeMinTextSize="12sp"
-            android:autoSizeMaxTextSize="100sp"
-            android:autoSizeStepGranularity="2sp"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="27sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -63,7 +63,6 @@
             android:id="@+id/mac"
             android:layout_width="287dp"
             android:layout_height="28dp"
-            android:layout_marginStart="60dp"
             android:layout_marginTop="44dp"
             android:autoSizeMaxTextSize="100sp"
             android:autoSizeMinTextSize="12sp"
@@ -74,6 +73,7 @@
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name" />
 
@@ -81,13 +81,13 @@
             android:id="@+id/stalker"
             android:layout_width="287dp"
             android:layout_height="28dp"
-            android:layout_marginStart="60dp"
             android:layout_marginTop="32dp"
             android:drawableLeft="@android:drawable/ic_dialog_alert"
             android:text=" Stalker"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/friend" />
 
@@ -95,9 +95,9 @@
             android:id="@+id/rmFriend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="124dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="40dp"
             android:text="Remove as Friend?"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mapView" />
 
@@ -105,9 +105,9 @@
             android:id="@+id/rmStalker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="120dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="40dp"
             android:text="Remove as Stalker?"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mapView" />
 

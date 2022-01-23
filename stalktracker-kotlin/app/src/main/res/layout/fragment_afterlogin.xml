@@ -32,12 +32,12 @@
             android:id="@+id/textView3"
             android:layout_width="212dp"
             android:layout_height="40dp"
-            android:layout_marginStart="96dp"
             android:layout_marginTop="28dp"
             android:text="Email"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
@@ -45,12 +45,12 @@
             android:id="@+id/textView4"
             android:layout_width="168dp"
             android:layout_height="68dp"
-            android:layout_marginStart="120dp"
             android:layout_marginTop="20dp"
             android:text="Recent Finds"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -58,29 +58,29 @@
             android:id="@+id/searchButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="160dp"
             android:layout_marginBottom="16dp"
             android:text="Search"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/foundView"
             android:layout_width="414dp"
             android:layout_height="240dp"
-            app:layout_constraintBottom_toTopOf="@+id/searchButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            />
+            app:layout_constraintBottom_toTopOf="@+id/searchButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <ImageView
             android:id="@+id/imageView6"
             android:layout_width="129dp"
             android:layout_height="100dp"
-            android:layout_marginStart="140dp"
             android:layout_marginTop="60dp"
             android:src="@drawable/person"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

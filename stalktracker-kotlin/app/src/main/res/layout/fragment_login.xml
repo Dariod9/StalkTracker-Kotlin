@@ -33,11 +33,11 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="172dp"
             android:layout_marginTop="100dp"
             android:text="SignIn"
             android:textColor="@android:color/white"
             android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,7 +45,6 @@
             android:id="@+id/editTextTextEmailAddress"
             android:layout_width="222dp"
             android:layout_height="57dp"
-            android:layout_marginStart="92dp"
             android:layout_marginTop="56dp"
             android:background="@android:color/darker_gray"
             android:ems="10"
@@ -53,6 +52,7 @@
             android:inputType="textEmailAddress"
             android:singleLine="true"
             android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -60,13 +60,13 @@
             android:id="@+id/editTextTextPassword"
             android:layout_width="226dp"
             android:layout_height="62dp"
-            android:layout_marginStart="92dp"
             android:layout_marginTop="32dp"
             android:background="@android:color/darker_gray"
             android:ems="10"
             android:hint="Password"
             android:inputType="textPassword"
             android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress" />
 
@@ -74,9 +74,10 @@
             android:id="@+id/buttonSignIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="160dp"
             android:layout_marginTop="64dp"
             android:text="Signin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
 

@@ -24,7 +24,7 @@
         android:title="@string/title_activity_maps" />
     <item
         android:id="@+id/statsFragment"
-        android:icon="@android:drawable/ic_dialog_info"
+        android:icon="@android:drawable/ic_menu_recent_history"
         android:title="Statistics" />
     <item
         android:id="@+id/aboutFragment2"

@@ -47,6 +47,10 @@ class BlackListFragment : Fragment() {
 
         })
 
+        binding.button3.setOnClickListener{
+            adapter.addBlack(Device("",binding.button3.text.toString(),false, false))
+        }
+
         stalkers= ArrayList()
         auth.currentUser?.email?.let {
             FirebaseUtils().fireStoreDatabase.collection("Users")

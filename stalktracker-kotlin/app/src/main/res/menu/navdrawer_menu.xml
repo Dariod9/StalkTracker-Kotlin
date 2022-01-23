@@ -7,13 +7,12 @@
         android:icon="@android:drawable/ic_menu_help"
         android:title="@string/home" />
     <item
-        android:id="@+id/about"
+        android:id="@+id/aboutFragment"
         android:icon="@android:drawable/ic_dialog_info"
         android:title="@string/about" />
     <item
-        android:id="@+id/ContactFragment"
+        android:id="@+id/contactFragment"
         android:icon="@android:drawable/stat_sys_phone_call"
-        android:title="@string/contactUs"
-        android:visible="false"/>
+        android:title="@string/contactUs" />
 
 </menu>

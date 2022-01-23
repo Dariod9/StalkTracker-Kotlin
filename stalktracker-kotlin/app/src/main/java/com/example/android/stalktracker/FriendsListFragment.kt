@@ -53,6 +53,10 @@ class FriendsListFragment : Fragment() {
 
         })
 
+        binding.button3.setOnClickListener{
+            adapter.addFriend(Device("",binding.button3.text.toString(),false, false))
+        }
+
         friends= ArrayList()
 //        auth.currentUser?.email?.let
         auth.currentUser?.email?.let {

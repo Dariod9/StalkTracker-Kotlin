@@ -16,16 +16,99 @@
 
 package com.example.android.stalktracker
 
+import android.app.AlertDialog
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import com.example.android.stalktracker.databinding.FragmentContactBinding
+import com.example.android.stalktracker.databinding.FragmentProfileBinding
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.EncodeHintType
+import com.google.zxing.qrcode.QRCodeWriter
+import com.google.zxing.WriterException
+
+import android.widget.Toast
+
+import com.firebase.ui.auth.AuthUI.getApplicationContext
+
+import android.content.DialogInterface
+
+import android.graphics.drawable.BitmapDrawable
+import android.opengl.Visibility
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.ImageView
+import com.firebase.ui.auth.AuthUI
+
+import com.google.zxing.common.BitMatrix
+
+import com.google.zxing.MultiFormatWriter
+import com.journeyapps.barcodescanner.BarcodeEncoder
+import android.content.Intent
+import android.net.Uri
+
 
 class ContactFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        val binding: FragmentContactBinding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_contact, container, false)
+
+        var url=""
+        binding.imageView.setOnClickListener{
+            Log.println(Log.DEBUG, String(),"Carregou")
+
+            binding.myImageView.bringToFront();
+            url="https://www.instagram.com/dariod99/"
+            val encoder = BarcodeEncoder()
+            val bitmap = encoder.encodeBitmap("https://www.instagram.com/dariod99/", BarcodeFormat.QR_CODE, 400, 400)
+            binding.myImageView.setImageBitmap(bitmap)
+            binding.myImageView.visibility=VISIBLE
+
+        }
+
+        binding.imageView3.setOnClickListener{
+            Log.println(Log.DEBUG, String(),"Carregou")
+            url="https://www.instagram.com/pedr0aalmeida/"
+
+            binding.myImageView.bringToFront();
+            val encoder = BarcodeEncoder()
+            val bitmap = encoder.encodeBitmap("https://www.instagram.com/pedr0aalmeida/", BarcodeFormat.QR_CODE, 400, 400)
+            binding.myImageView.setImageBitmap(bitmap)
+            binding.myImageView.visibility=VISIBLE
+
+        }
+
+        binding.myImageView.setOnClickListener{
+            binding.myImageView.visibility= GONE
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(browserIntent)
+
+        }
+
+        return binding.root
+    }
+
+
+    fun getQrCodeBitmap(): Bitmap {
+        val size = 512 //pixels
+        val qrCodeContent = "https://www.instagram.com/dariod99/"//"WIFI:S:$ssid;T:WPA;P:$password;;"
+        val hints = hashMapOf<EncodeHintType, Int>().also { it[EncodeHintType.MARGIN] = 1 } // Make the QR code buffer border narrower
+        val bits = QRCodeWriter().encode(qrCodeContent, BarcodeFormat.QR_CODE, size, size)
+        return Bitmap.createBitmap(size, size, Bitmap.Config.RGB_565).also {
+            for (x in 0 until size) {
+                for (y in 0 until size) {
+                    it.setPixel(x, y, if (bits[x, y]) Color.BLACK else Color.WHITE)
+                }
+            }
+        }
     }
 }
