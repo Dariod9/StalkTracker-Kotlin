@@ -11,10 +11,12 @@ const val channelID = "channel1"
 
 class Notification : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
+
         val notification = NotificationCompat.Builder(context, channelID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("wi")
-            .setContentText("procura os stalkers")
+            .setContentTitle("Stalkers may be close")
+            .setContentText("Time to check your surroundings!")
+            .setAutoCancel(true)
             .build()
 
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

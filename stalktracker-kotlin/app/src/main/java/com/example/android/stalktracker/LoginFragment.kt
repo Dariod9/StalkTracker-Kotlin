@@ -64,7 +64,7 @@ class LoginFragment : Fragment() {
 //                view?.findNavController()?.navigate(R.id.action_loginFragment_to_afterLoginFragment)
                 val intent = Intent(activity, LoggedActivity::class.java)
                 startActivity(intent)
-
+                (activity as MainActivity).finish()
             }
         }.addOnFailureListener { exception ->
 //            val mySnackbar = view?.let { Snackbar.make(it,"ERROR!", 3) }

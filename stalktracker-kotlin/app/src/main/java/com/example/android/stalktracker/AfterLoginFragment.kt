@@ -18,10 +18,14 @@ package com.example.android.stalktracker
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.*
+import android.content.Context.NOTIFICATION_SERVICE
 import android.content.pm.PackageManager
 import android.hardware.biometrics.BiometricManager
 import android.location.Location
@@ -43,7 +47,12 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.navigation.NavDeepLink
+import androidx.navigation.NavDeepLinkBuilder
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.model.LatLng
 
@@ -62,6 +71,7 @@ class AfterLoginFragment : Fragment(), LocationListener {
     private var m_devices: ArrayList<Device> = ArrayList()
     private var addresses: ArrayList<String> = ArrayList()
     private var friendsAdresses: ArrayList<String> = ArrayList()
+    private var notification_id = 0
 
 
     override fun onCreateView(
@@ -142,6 +152,8 @@ class AfterLoginFragment : Fragment(), LocationListener {
                 activity?.registerReceiver(mReceiver, filter);
             }
         }
+
+        createNotificationChannel()
 
         setHasOptionsMenu(true)
 
@@ -249,7 +261,7 @@ class AfterLoginFragment : Fragment(), LocationListener {
 //                        positions.add(location)
 //                        newdev = Device(device.name, device.address, false, false, positions)}
                     else name = device.address
-                    checkStalker(device.address)
+                    checkStalker(device.address, name)
 //                    newdev = Device(device.address, device.address, false, false, positions)
                     if (!friendsAdresses.contains(device.address) && (!addresses.contains(device.address))) {
 
@@ -286,7 +298,7 @@ class AfterLoginFragment : Fragment(), LocationListener {
         }
     }
 
-    private fun checkStalker(address: String?) {
+    private fun checkStalker(address: String?, name : String?) {
         auth.currentUser?.email?.let {
             FirebaseUtils().fireStoreDatabase.collection("Users")
                 .document(it)
@@ -295,8 +307,10 @@ class AfterLoginFragment : Fragment(), LocationListener {
                 .get()
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
-                        if(document.data["address"].toString()==address)
+                        if(document.data["address"].toString()==address){
                             adapter.stalkerAlert(context, (activity as LoggedActivity))
+                            createNotification(name!!)
+                        }
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -304,6 +318,51 @@ class AfterLoginFragment : Fragment(), LocationListener {
                 }
         }
     }
+
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Notification Channel"
+            val description = "A description of the channel"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel("channel2", name, importance)
+            channel.description = description
+
+            // Register the channel with the system
+            val notificationManager = (activity as LoggedActivity).getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun createNotification(address: String){
+        // Create an explicit intent for an Activity in your app
+        val intent = Intent(context, LoggedActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        val builder = context?.let {
+            NotificationCompat.Builder(it, channelID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("Stalker found!")
+                .setContentText(address)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                // Set the intent that will fire when the user taps the notification
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+        }
+
+        if (builder != null) {
+            with(context?.let { NotificationManagerCompat.from(it) }) {
+                // notificationId is a unique int for each notification that you must define
+                this?.notify(notification_id, builder.build())
+                notification_id += 1
+            }
+        }
+
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun insertDevice(name: String, address: String) {

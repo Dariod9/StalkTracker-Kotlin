@@ -29,6 +29,8 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -99,7 +101,8 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext,"Notifications off",Toast.LENGTH_SHORT).show()
             }
             else{
-                scheduleRecurringNotification()
+//                scheduleRecurringNotification()   // a cada 15 min
+                scheduleRecurringNotification2()    // para testar
                 Toast.makeText(applicationContext,"Notifications on",Toast.LENGTH_SHORT).show()
             }
             isNotificationOn = !isNotificationOn
@@ -111,12 +114,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getPendingIntent(): PendingIntent {
-        val intent = Intent(applicationContext, Notification::class.java)
+        val resultIntent = Intent(applicationContext, Notification::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
 
         return PendingIntent.getBroadcast(
             applicationContext,
             notificationID,
-            intent,
+            resultIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
@@ -138,6 +143,23 @@ class MainActivity : AppCompatActivity() {
             AlarmManager.RTC_WAKEUP,
             updateTime.timeInMillis,
             AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+            pendingIntent
+        )
+    }
+
+    private fun scheduleRecurringNotification2(){
+        val pendingIntent = getPendingIntent()
+
+        val updateTime: Calendar = Calendar.getInstance()
+        updateTime.timeZone = TimeZone.getTimeZone("GMT")
+        updateTime.set(Calendar.HOUR_OF_DAY, 15)
+        updateTime.set(Calendar.MINUTE, 30)
+
+        val alarmManager = getAlarmManager()
+
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            updateTime.timeInMillis,
             pendingIntent
         )
     }
