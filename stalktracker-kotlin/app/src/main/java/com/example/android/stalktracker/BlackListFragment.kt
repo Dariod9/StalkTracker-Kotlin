@@ -16,6 +16,7 @@ import com.example.android.stalktracker.databinding.FragmentBlacklistBinding
 import com.google.firebase.auth.FirebaseAuth
 import models.Device
 import models.DeviceAdapter
+import models.FirebaseUtils
 
 class BlackListFragment : Fragment() {
     private val adapter = DeviceAdapter()

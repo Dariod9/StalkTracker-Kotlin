@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.stalktracker.FirebaseUtils
 import com.example.android.stalktracker.LoggedActivity
 import com.example.android.stalktracker.R
 import com.google.firebase.auth.FirebaseAuth

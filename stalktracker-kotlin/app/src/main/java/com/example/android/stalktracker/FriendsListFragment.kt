@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import models.Device
 import models.DeviceAdapter
+import models.FirebaseUtils
 
 class FriendsListFragment : Fragment() {
     private val adapter = DeviceAdapter()

@@ -30,11 +30,11 @@ import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.example.android.stalktracker.databinding.FragmentHistoryBinding
-import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import models.Device
 import models.DeviceAdapter
 import models.DeviceDate
+import models.FirebaseUtils
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*

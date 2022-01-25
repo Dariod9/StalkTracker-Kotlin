@@ -16,40 +16,31 @@
 
 package com.example.android.stalktracker
 
-import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
-import com.example.android.stalktracker.databinding.FragmentFriendslistBinding
 import com.example.android.stalktracker.databinding.FragmentProfileBinding
-import com.example.android.stalktracker.databinding.FragmentProfileBindingImpl
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import models.Device
 import models.DeviceAdapter
-import java.text.SimpleDateFormat
-import java.util.*
 
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.model.Marker
 import com.google.firebase.auth.FirebaseAuth
 import kotlin.collections.ArrayList
 import com.google.android.gms.maps.model.LatLngBounds
-
-
-
+import models.FirebaseUtils
 
 
 class ProfileFragment : Fragment(), OnMapReadyCallback {
@@ -110,6 +101,34 @@ class ProfileFragment : Fragment(), OnMapReadyCallback {
         Log.println(Log.DEBUG, String(), device.positions.toString())
 
         binding.name.setText(device.name)
+        binding.name.setOnClickListener{
+            binding.name.setCursorVisible(true);
+            binding.name.setFocusableInTouchMode(true);
+            binding.name.setInputType(InputType.TYPE_CLASS_TEXT);
+            binding.name.requestFocus();
+            binding.button4.visibility=View.VISIBLE//to trigger the soft input
+        }
+
+        binding.button4.setOnClickListener{
+            binding.name.setCursorVisible(false);
+            binding.name.setFocusableInTouchMode(false);
+            auth.currentUser?.email?.let {
+                FirebaseUtils().fireStoreDatabase.collection("Users").document(it)
+                    .collection("users")
+                    .document(device.address)
+                    .update("name", binding.name.text.toString())
+                    .addOnSuccessListener {
+                        Log.println(Log.DEBUG, String(), "Success")
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.println(Log.DEBUG, String(), "Error!")
+                    }
+            }
+            binding.button4.visibility=View.GONE
+
+
+        }
+
         binding.mac.setText(device.address)
         if(device.friend) binding.friend.setText(" Friend!") else binding.friend.setText(" Not a Friend")
         if(device.black) binding.stalker.setText(" Stalker!") else binding.stalker.setText(" Not a Stalker")
@@ -128,6 +147,8 @@ class ProfileFragment : Fragment(), OnMapReadyCallback {
             val act = activity as LoggedActivity
             adapter.removeFriendAlert(context, act, device)
         }
+
+
 
 
 

@@ -41,29 +41,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mac" />
 
-        <TextView
+        <EditText
             android:id="@+id/name"
-            android:layout_width="288dp"
-            android:layout_height="54dp"
-            android:layout_marginTop="68dp"
+            android:layout_width="286dp"
+            android:layout_height="71dp"
+            android:layout_marginTop="20dp"
             android:autoSizeMaxTextSize="100sp"
             android:autoSizeMinTextSize="12sp"
             android:autoSizeStepGranularity="2sp"
             android:autoSizeTextType="uniform"
-            android:drawableLeft="@mipmap/logo_round"
             android:text="Nome"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="27sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.504"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView8" />
 
         <TextView
             android:id="@+id/mac"
             android:layout_width="287dp"
             android:layout_height="28dp"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="20dp"
             android:autoSizeMaxTextSize="100sp"
             android:autoSizeMinTextSize="12sp"
             android:autoSizeStepGranularity="2sp"
@@ -116,11 +116,36 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="291dp"
             android:layout_height="208dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="32dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.525"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/stalker"
             tools:ignore="SpeakableTextPresentCheck" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="56dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="120dp"
+            android:drawableEnd="@android:drawable/ic_menu_save"
+            android:drawableTint="@android:color/black"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/name"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="82dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/logo2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

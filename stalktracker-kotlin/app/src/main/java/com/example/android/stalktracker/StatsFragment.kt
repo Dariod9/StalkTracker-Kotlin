@@ -11,13 +11,12 @@ import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
-import com.example.android.stalktracker.databinding.FragmentFriendslistBinding
 import com.example.android.stalktracker.databinding.FragmentStatsBinding
-import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import models.Device
 import models.DeviceAdapter
+import models.FirebaseUtils
 
 class StatsFragment : Fragment() {
     private val adapter = DeviceAdapter()

@@ -17,7 +17,6 @@
 package com.example.android.stalktracker
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -27,7 +26,6 @@ import android.bluetooth.BluetoothManager
 import android.content.*
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.pm.PackageManager
-import android.hardware.biometrics.BiometricManager
 import android.location.Location
 import android.location.LocationListener
 import android.os.Bundle
@@ -50,16 +48,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.navigation.NavDeepLink
-import androidx.navigation.NavDeepLinkBuilder
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.model.LatLng
 
 import models.Device
 import models.DeviceAdapter
-import java.text.DecimalFormat
-import java.time.LocalDateTime
+import models.FirebaseUtils
 
 class AfterLoginFragment : Fragment(), LocationListener {
     private lateinit var auth: FirebaseAuth
