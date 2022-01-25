@@ -55,6 +55,7 @@ class LoggedActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        auth = FirebaseAuth.getInstance()
         sp  = getSharedPreferences("login", MODE_PRIVATE)
         @Suppress("UNUSED_VARIABLE")
         val binding = DataBindingUtil.setContentView<ActivityLoggedBinding>(this, R.layout.activity_logged)
@@ -65,6 +66,7 @@ class LoggedActivity : AppCompatActivity() {
         navigationView=findViewById(R.id.navView)
 
         navigationView.menu.findItem(R.id.logout).setOnMenuItemClickListener { menuItem ->
+            auth.signOut()
             sp.edit().putBoolean("logged",false).apply();
             finish()
             val intent = Intent(this, MainActivity::class.java)
