@@ -69,8 +69,7 @@ class ProfileFragment : Fragment(), OnMapReadyCallback {
         val binding: FragmentProfileBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_profile, container, false)
 
-//        val listaPos=ArrayList<LatLng>()
-//        listaPos.add(LatLng(arguments?.getDouble("latitude")!!,arguments?.getDouble("longitude")!!))
+
         positions= ArrayList()
 
         val device= Device(arguments?.getString("name").toString(),
@@ -138,19 +137,6 @@ class ProfileFragment : Fragment(), OnMapReadyCallback {
         Thread.sleep(2000)
         mapView.getMapAsync(this)
 
-//        map = mapView.map;
-//        map.getUiSettings().setMyLocationButtonEnabled(false);
-//        map.setMyLocationEnabled(true);
-
-//        val mapFragment = (activity as LoggedActivity).supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment
-//        mapFragment.getMapAsync(this)
-//
-//        val mapFragment2 = SupportMapFragment.newInstance()
-//        (activity as LoggedActivity).supportFragmentManager
-//            .beginTransaction()
-//            .add(R.id.mapView, mapFragment)
-//            .commit()
-
 
         return binding.root
     }
@@ -161,17 +147,13 @@ class ProfileFragment : Fragment(), OnMapReadyCallback {
         Log.println(Log.DEBUG, String(), "Positions: "+positions)
 
         map = p0!!
-//        val markerOptions = MarkerOptions().position(position).title("TOU AQUI ZÉ")
         if(positions.size!=0) {
             for(pos in positions) {
                 val markerOptions = MarkerOptions().position(pos).title(name)
                 map.addMarker(markerOptions)
                 markers.add(markerOptions)
-//            map.animateCamera(CameraUpdateFactory.newLatLng(pos))
-//            map.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15f))
-//            Log.println(Log.DEBUG, String(), "Position: "+pos)
+
             }
-//            markers.add(MarkerOptions().position(pos).title("TOU AQUI ZÉ"))
         }
         else{
             val markerOptions = MarkerOptions().position(LatLng(0.0,0.0)).title("")
@@ -185,34 +167,8 @@ class ProfileFragment : Fragment(), OnMapReadyCallback {
         val bounds = builder.build()
         map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100))
 
-//        for(marker in markers) map.addMarker(marker)
 
         map.uiSettings.isMyLocationButtonEnabled = false
-//        map.isMyLocationEnabled = true
-        /*
-       //in old Api Needs to call MapsInitializer before doing any CameraUpdateFactory call
-        try {
-            MapsInitializer.initialize(this.getActivity());
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-        }
-       */
-
-        // Updates the location and zoom of the MapView
-        /*CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(43.1, -87.9), 10);
-        map.animateCamera(cameraUpdate);*/
-        /*
-       //in old Api Needs to call MapsInitializer before doing any CameraUpdateFactory call
-        try {
-            MapsInitializer.initialize(this.getActivity());
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-        }
-       */
-
-        // Updates the location and zoom of the MapView
-        /*CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(43.1, -87.9), 10);
-        map.animateCamera(cameraUpdate);*/
 
 
     }

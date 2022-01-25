@@ -68,14 +68,6 @@ class FriendsListFragment : Fragment() {
                 .addOnSuccessListener { documents ->
                     Log.println(Log.DEBUG, String(), "Entrou no success")
                     for (document in documents) {
-////                        var pos = LatLng((document.data.get("location") as Map<*, *>).get("latitude") as Double,(document.data.get("location") as Map<*, *>).get("longitude") as Double)
-////                        Log.println(Log.DEBUG, String(), (document.data["location"]).toString())
-//                        var pos=LatLng(0.0,0.0)
-//                    if((document.data.get("location")!=null)){
-//                        pos=(activity as LoggedActivity).locationParser(document.data.get("location").toString())
-//                    }
-////                        val listaPos=ArrayList<LatLng>()
-////                        listaPos.add((activity as LoggedActivity).locationParser(document.data["position"].toString()))
 
                         friends.add(Device(document.data.get("name") as String,
                             document.data.get("address") as String,

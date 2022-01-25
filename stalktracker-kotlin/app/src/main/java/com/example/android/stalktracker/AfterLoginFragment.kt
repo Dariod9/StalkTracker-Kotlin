@@ -160,10 +160,6 @@ class AfterLoginFragment : Fragment(), LocationListener {
         return binding.root
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        super.onCreateOptionsMenu(menu, inflater)
-//        inflater.inflate(R.menu.options_menu, menu)
-//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return NavigationUI.onNavDestinationSelected(item, requireView().findNavController())
@@ -188,10 +184,6 @@ class AfterLoginFragment : Fragment(), LocationListener {
                 .addOnFailureListener { exception ->
                     Log.println(Log.DEBUG, String(), "ERRO")
                 }
-
-
-            FirebaseUtils().fireStoreDatabase.collection("Users")
-
         }
 
     }
@@ -253,16 +245,13 @@ class AfterLoginFragment : Fragment(), LocationListener {
                 val device =
                     intent.getParcelableExtra<Parcelable>(BluetoothDevice.EXTRA_DEVICE) as BluetoothDevice?
                 if (device != null) {
-//                    val newdev: Device
+
                     var name: String
                     if (device.name != null) name = device.name
-//
-//                        positions.clear()
-//                        positions.add(location)
-//                        newdev = Device(device.name, device.address, false, false, positions)}
+
                     else name = device.address
                     checkStalker(device.address, name)
-//                    newdev = Device(device.address, device.address, false, false, positions)
+
                     if (!friendsAdresses.contains(device.address) && (!addresses.contains(device.address))) {
 
                         Log.println(Log.DEBUG, String(), "Endereço: " + device.address)
@@ -272,22 +261,6 @@ class AfterLoginFragment : Fragment(), LocationListener {
                         m_devices.add(Device(name, device.address, false, false))
                         addresses.add(device.address)
                         insertDevice(name, device.address)
-//                        Log.println(Log.DEBUG, String(), "Devices : "+ m_devices)
-
-//                        m_devices.add(newdev)
-//                        Log.println(Log.DEBUG, String(), newdev.toString())
-//                        auth.currentUser?.email?.let {
-//                            FirebaseUtils().fireStoreDatabase.collection("Users").document(it)
-//                                .collection("users")
-//                                .document(device.address)
-//                                .set(newdev)
-//                                .addOnSuccessListener {
-//                                    Log.println(Log.DEBUG, String(), "Added document ")
-//                                }
-//                                .addOnFailureListener { exception ->
-//                                    Log.println(Log.DEBUG, String(), "Error adding document")
-//                                }
-//                        }
 
                     }
                 }
@@ -341,13 +314,13 @@ class AfterLoginFragment : Fragment(), LocationListener {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-
+        Log.println(Log.DEBUG, String(), "NOTIFICACAO DE BLACK")
         val builder = context?.let {
             NotificationCompat.Builder(it, channelID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.mipmap.logo_foreground)
                 .setContentTitle("Stalker found!")
                 .setContentText(address)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 // Set the intent that will fire when the user taps the notification
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
@@ -355,6 +328,8 @@ class AfterLoginFragment : Fragment(), LocationListener {
 
         if (builder != null) {
             with(context?.let { NotificationManagerCompat.from(it) }) {
+                Log.println(Log.DEBUG, String(), "NOTIFICACAO DE builder")
+
                 // notificationId is a unique int for each notification that you must define
                 this?.notify(notification_id, builder.build())
                 notification_id += 1
@@ -417,19 +392,7 @@ class AfterLoginFragment : Fragment(), LocationListener {
                                         Log.println(Log.DEBUG, String(), "Error adding document")
                                     }
                             }
-                            //                        positions.add()
-                            //                            Log.println(
-                            //                                Log.DEBUG,
-                            //                                String(),
-                            //                                (document.data.get("positions") as List<*>)[0].toString()
-                            //                            )
-                            //                        friendsAdresses.add((document.data.get("address").toString()))
-                            //                        Log.println(Log.DEBUG, String(), "É ISTO:")
-                            //                        Log.println(
-                            //                            Log.DEBUG,
-                            //                            String(),
-                            //                            "É ISTO: " + "${document.id} => ${document.data}"
-                            //                        )
+
                         }
                     } else {
                         if(location.latitude!=0.0 && location.longitude!=0.0)positions.add(location)
@@ -441,8 +404,6 @@ class AfterLoginFragment : Fragment(), LocationListener {
                             false,
                             positions, positions.size
                         )
-
-//                        m_devices.add(device)
 
                         auth.currentUser?.email?.let {
                             FirebaseUtils().fireStoreDatabase.collection("Users").document(it)
@@ -463,9 +424,7 @@ class AfterLoginFragment : Fragment(), LocationListener {
                     Log.println(Log.DEBUG, String(), "ERRO")
                 }
         }
-//        Thread.sleep(2000)
-//        adapter.data=m_devices
-//        Log.println(Log.DEBUG, String(), "DEvices : "+ m_devices)
+
     }
 
 }

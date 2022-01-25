@@ -71,18 +71,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
 
         positions=ArrayList()
 
-
-//        fetchLocation(act)
-
         getLocation()
         getPositions()
 
-
-//        Log.println(Log.DEBUG, String(), "LOCATION1 : $currentLocation")
         mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         Thread.sleep(2000)
         mapFragment?.getMapAsync(this)
-//        Log.println(Log.DEBUG, String(), "LOCATION2 : $currentLocation")
 
 
 

@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/TitleFragment"
-        android:icon="@android:drawable/ic_menu_help"
+        android:icon="@android:drawable/alert_light_frame"
         android:title="@string/home" />
     <item
         android:id="@+id/friendsListFragment"
@@ -12,7 +12,7 @@
         android:title="@string/friendslist" />
     <item
         android:id="@+id/blackListFragment"
-        android:icon="@android:drawable/alert_light_frame"
+        android:icon="@android:drawable/ic_dialog_alert"
         android:title="@string/blacklist" />
     <item
         android:id="@+id/historyFragment"

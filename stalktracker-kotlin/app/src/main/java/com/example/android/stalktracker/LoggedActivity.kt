@@ -82,17 +82,6 @@ class LoggedActivity : AppCompatActivity() {
         }
 
 
-
-//        var settings = firestoreSettings {
-//            isPersistenceEnabled = true
-//        }
-//
-//        settings = FirebaseFirestoreSettings.Builder()
-//            .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
-//            .build()
-//
-//        FirebaseUtils().fireStoreDatabase.firestoreSettings = settings
-
         val locationPermissionCheck =
             ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         
@@ -116,25 +105,9 @@ class LoggedActivity : AppCompatActivity() {
     }
 
 
-//
-//    fun getNum(){
-////        Log.println(Log.DEBUG, String(),deviceViewModel.numDevices.toString())
-//        val ref=this
-//        lifecycleScope.launch(Dispatchers.IO) {
-//            ref.runOnUiThread {
-//                Log.println(Log.DEBUG, String(), deviceViewModel.numDevices.toString())
-//            }
-//        }
-//    }
 
     fun locationParser(loc: String) : LatLng {
-//        Log.println(Log.DEBUG, String(), "A String: $loc")
-//        var fSplit=loc.split(",")
-//        Log.println(Log.DEBUG, String(), fSplit.get(0))
-//        var lat=fSplit.get(0).split("=").get(1)
-//        Log.println(Log.DEBUG, String(), lat)
-//
-//        var long=fSplit[1].split("=")[1]
+
         val jsonObj = JSONObject(loc)
         val map = jsonObj.toMap()
 
@@ -145,31 +118,10 @@ class LoggedActivity : AppCompatActivity() {
     fun dateParser(date : String) : DeviceDate{
         val jsonObj = JSONObject(date)
         val map = jsonObj.toMap()
-//       Log.println(Log.DEBUG, String(), map["dayOfWeek"].toString())
         val dev=DeviceDate(map["dayOfMonth"].toString().toInt(), map["monthValue"].toString().toInt(), map["month"].toString(), map["year"].toString().toInt() )
-//        Log.println(Log.DEBUG, String(), dev.day.toString()+" "+dev.month+" "+dev.year.toString())
 
         return dev
     }
-
-
-//    {dayOfWeek=THURSDAY, hour=12, month=JANUARY, year=2022, dayOfMonth=20, dayOfYear=20, monthValue=1, nano=245000000, chronology={calendarType=iso8601, id=ISO}
-
-//    fun checkLogged() {
-//        auth = Firebase.auth
-//        if (auth.currentUser == null) {
-//            // Not signed in, launch the Sign In activity
-//            startActivity(Intent(this, SignInActivity::class.java))
-//            finish()
-//            return
-//        }
-//    }
-
-//    fun signOut() {
-//        AuthUI.getInstance().signOut(this)
-//        startActivity(Intent(this, SignInActivity::class.java))
-//        finish()
-//    }
 
 }
 

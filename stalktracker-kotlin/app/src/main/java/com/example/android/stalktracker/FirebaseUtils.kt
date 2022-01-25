@@ -1,26 +1,23 @@
 package com.example.android.stalktracker
 
+import android.bluetooth.BluetoothClass
 import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.ktx.firestoreSettings
+import models.Device
 
 class FirebaseUtils {
-//    val bool = setSettings()
-//
-//    private fun setSettings(): Boolean {
-//
-//        fireStoreDatabase.firestoreSettings=FirebaseFirestoreSettings.Builder()
-//            .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
-//            .build()
-//        return true
-//    }
 
+    lateinit var auth : FirebaseAuth
     var initialized = false
     val fireStoreDatabase = giveDB()
 
+
     private fun giveDB(): FirebaseFirestore {
 
+        auth = FirebaseAuth.getInstance()
         var db : FirebaseFirestore
 
         if(!initialized) {
@@ -42,4 +39,5 @@ class FirebaseUtils {
 
         return db
     }
+
 }

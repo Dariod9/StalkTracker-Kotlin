@@ -58,7 +58,6 @@ class LoginFragment : Fragment() {
 
         auth.signInWithEmailAndPassword(email,pwd).addOnCompleteListener { task ->
             if(task.isSuccessful){
-//                val mySnackbar = view?.let { Snackbar.make(it,"Login Succesfull!", 3) }
                 Log.println(Log.DEBUG, String(), "DEU")
                 val toast = Toast.makeText(context, "Logging in..", Toast.LENGTH_LONG)
                 toast.show()
@@ -70,7 +69,6 @@ class LoginFragment : Fragment() {
                 (activity as MainActivity).finish()
             }
         }.addOnFailureListener { exception ->
-//            val mySnackbar = view?.let { Snackbar.make(it,"ERROR!", 3) }
             Log.println(Log.DEBUG, String(), "NÃO DEU")
             val toast = Toast.makeText(context, "Error: "+exception, Toast.LENGTH_LONG)
             toast.show()
