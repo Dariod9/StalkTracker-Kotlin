@@ -22,6 +22,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -29,8 +30,6 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -46,9 +45,16 @@ class MainActivity : AppCompatActivity() {
     lateinit var auth : FirebaseAuth
     private lateinit var navigationView: NavigationView
     private var isNotificationOn : Boolean = false
+    lateinit var sp : SharedPreferences
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+        sp  = getSharedPreferences("login", MODE_PRIVATE)
+        if(sp.getBoolean("logged",false)){
+            val intent = Intent(this, LoggedActivity::class.java)
+            startActivity(intent)
+            (this as MainActivity).finish()
+        }
         super.onCreate(savedInstanceState)
         @Suppress("UNUSED_VARIABLE")
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)

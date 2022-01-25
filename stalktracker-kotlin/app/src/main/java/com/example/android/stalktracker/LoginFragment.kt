@@ -42,6 +42,8 @@ class LoginFragment : Fragment() {
 
         // Inflate the layout for this fragment
         auth=FirebaseAuth.getInstance()
+//        (activity as MainActivity).sp.edit().putBoolean("logged",false).apply();
+
 
         val binding: FragmentLoginBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_login, container, false)
@@ -60,6 +62,7 @@ class LoginFragment : Fragment() {
                 Log.println(Log.DEBUG, String(), "DEU")
                 val toast = Toast.makeText(context, "Logging in..", Toast.LENGTH_LONG)
                 toast.show()
+                (activity as MainActivity).sp.edit().putBoolean("logged",true).apply();
 //                (activity as MainActivity).changeNav()
 //                view?.findNavController()?.navigate(R.id.action_loginFragment_to_afterLoginFragment)
                 val intent = Intent(activity, LoggedActivity::class.java)

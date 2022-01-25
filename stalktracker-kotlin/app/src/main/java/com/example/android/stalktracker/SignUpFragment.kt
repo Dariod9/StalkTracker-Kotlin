@@ -36,6 +36,7 @@ class SignUpFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+//        (activity as MainActivity).sp.edit().putBoolean("logged",false).apply();
 
         auth=FirebaseAuth.getInstance()
 

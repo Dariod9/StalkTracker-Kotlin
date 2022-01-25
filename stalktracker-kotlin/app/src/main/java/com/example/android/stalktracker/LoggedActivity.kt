@@ -18,6 +18,7 @@ package com.example.android.stalktracker
 
 import android.Manifest
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -49,10 +50,12 @@ class LoggedActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     lateinit var auth : FirebaseAuth
     lateinit var navigationView: NavigationView
+    lateinit var sp : SharedPreferences
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sp  = getSharedPreferences("login", MODE_PRIVATE)
         @Suppress("UNUSED_VARIABLE")
         val binding = DataBindingUtil.setContentView<ActivityLoggedBinding>(this, R.layout.activity_logged)
         val navController = this.findNavController(R.id.myNavHostFragmentLogged)
@@ -62,6 +65,7 @@ class LoggedActivity : AppCompatActivity() {
         navigationView=findViewById(R.id.navView)
 
         navigationView.menu.findItem(R.id.logout).setOnMenuItemClickListener { menuItem ->
+            sp.edit().putBoolean("logged",false).apply();
             finish()
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)

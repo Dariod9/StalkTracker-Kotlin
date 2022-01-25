@@ -7,15 +7,12 @@ import android.text.Html
 import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.stalktracker.FirebaseUtils
 import com.example.android.stalktracker.LoggedActivity
 import com.example.android.stalktracker.R
-import com.example.android.stalktracker.Util
 import com.google.firebase.auth.FirebaseAuth
 
 class DeviceAdapter: RecyclerView.Adapter<ButtonItemViewHolder>() {

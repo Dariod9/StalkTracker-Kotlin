@@ -27,6 +27,7 @@ class FirebaseUtils {
             val settings = FirebaseFirestoreSettings.Builder()
 //            .isPersistenceEnabled()
                 .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
+                .setPersistenceEnabled(true)
                 .build()
             db = FirebaseFirestore.getInstance()
             Log.println(Log.DEBUG, String(), db.firestoreSettings.isPersistenceEnabled.toString())

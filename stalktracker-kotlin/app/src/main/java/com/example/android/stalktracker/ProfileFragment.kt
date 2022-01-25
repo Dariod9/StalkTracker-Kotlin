@@ -162,15 +162,21 @@ class ProfileFragment : Fragment(), OnMapReadyCallback {
 
         map = p0!!
 //        val markerOptions = MarkerOptions().position(position).title("TOU AQUI ZÉ")
-        for(pos in positions){
-            val markerOptions = MarkerOptions().position(pos).title(name)
-            map.addMarker(markerOptions)
-            markers.add(markerOptions)
+        if(positions.size!=0) {
+            for(pos in positions) {
+                val markerOptions = MarkerOptions().position(pos).title(name)
+                map.addMarker(markerOptions)
+                markers.add(markerOptions)
 //            map.animateCamera(CameraUpdateFactory.newLatLng(pos))
 //            map.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15f))
 //            Log.println(Log.DEBUG, String(), "Position: "+pos)
-
+            }
 //            markers.add(MarkerOptions().position(pos).title("TOU AQUI ZÉ"))
+        }
+        else{
+            val markerOptions = MarkerOptions().position(LatLng(0.0,0.0)).title("")
+            map.addMarker(markerOptions)
+            markers.add(markerOptions)
         }
         val builder = LatLngBounds.Builder()
         for (marker in markers) {
