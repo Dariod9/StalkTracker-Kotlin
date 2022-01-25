@@ -155,7 +155,7 @@ class ProfileFragment : Fragment(), OnMapReadyCallback {
         return binding.root
     }
 
-    override fun onMapReady(p0: GoogleMap?) {
+    override fun onMapReady(p0: GoogleMap) {
         val markers=ArrayList<MarkerOptions>()
 
         Log.println(Log.DEBUG, String(), "Positions: "+positions)

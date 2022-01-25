@@ -17,12 +17,19 @@
 package com.example.android.stalktracker
 
 import android.Manifest
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -74,6 +81,8 @@ class LoggedActivity : AppCompatActivity() {
             true
         }
 
+
+
 //        var settings = firestoreSettings {
 //            isPersistenceEnabled = true
 //        }
@@ -98,12 +107,14 @@ class LoggedActivity : AppCompatActivity() {
             Log.println(Log.DEBUG, String(), "Location granted")
         }
 
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = this.findNavController(R.id.myNavHostFragmentLogged)
         return NavigationUI.navigateUp(navController, drawerLayout)
     }
+
 
 //
 //    fun getNum(){

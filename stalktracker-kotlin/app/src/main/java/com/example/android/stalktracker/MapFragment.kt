@@ -145,46 +145,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         }
     }
 
-    override fun onMapReady(googleMap: GoogleMap?) {
-
-        var markers=ArrayList<MarkerOptions>()
-        Log.println(Log.DEBUG, String(), "Mapa Ready")
-        mMap = googleMap!!
-
-//        val lating = LatLng(-34.0, 151.0)
-//        val lating = LatLng(currentLocation!!.latitude, currentLocation!!.longitude)
-//        val markerOptions = MarkerOptions().position(lating).title("I AM HERE BOYY")
-        Log.println(Log.DEBUG, String(), "Mapa foi ready")
-
-        for(pos in positions){
-            val markerOptions = MarkerOptions().position(pos).title(names.get(positions.indexOf(pos)))
-            mMap.addMarker(markerOptions)
-            markers.add(markerOptions)
-//            map.animateCamera(CameraUpdateFactory.newLatLng(pos))
-//            map.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15f))
-//            Log.println(Log.DEBUG, String(), "Position: "+pos)
-
-//            markers.add(MarkerOptions().position(pos).title("TOU AQUI ZÉ"))
-        }
-
-        val builder = LatLngBounds.Builder()
-        for (marker in markers) {
-            builder.include(marker.position)
-        }
-        val bounds = builder.build()
-        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100))
-
-//        for(marker in markers) map.addMarker(marker)
-
-        mMap.uiSettings.isMyLocationButtonEnabled = false
-
-//        mMap = googleMap!!
-//        // Add a marker in Sydney and move the camera
-//        val sydney = LatLng(-34.0, 151.0)
-//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-    }
-
 //    override fun onRequestPermissionsResult(
 //        requestCode: Int,
 //        permissions: Array<out String>,
@@ -226,6 +186,45 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
 
             }
         }
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        var markers=ArrayList<MarkerOptions>()
+        Log.println(Log.DEBUG, String(), "Mapa Ready")
+        mMap = googleMap
+
+//        val lating = LatLng(-34.0, 151.0)
+//        val lating = LatLng(currentLocation!!.latitude, currentLocation!!.longitude)
+//        val markerOptions = MarkerOptions().position(lating).title("I AM HERE BOYY")
+        Log.println(Log.DEBUG, String(), "Mapa foi ready")
+
+        for(pos in positions){
+            val markerOptions = MarkerOptions().position(pos).title(names.get(positions.indexOf(pos)))
+            mMap.addMarker(markerOptions)
+            markers.add(markerOptions)
+//            map.animateCamera(CameraUpdateFactory.newLatLng(pos))
+//            map.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15f))
+//            Log.println(Log.DEBUG, String(), "Position: "+pos)
+
+//            markers.add(MarkerOptions().position(pos).title("TOU AQUI ZÉ"))
+        }
+
+        val builder = LatLngBounds.Builder()
+        for (marker in markers) {
+            builder.include(marker.position)
+        }
+        val bounds = builder.build()
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100))
+
+//        for(marker in markers) map.addMarker(marker)
+
+        mMap.uiSettings.isMyLocationButtonEnabled = false
+
+//        mMap = googleMap!!
+//        // Add a marker in Sydney and move the camera
+//        val sydney = LatLng(-34.0, 151.0)
+//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
 
 }
